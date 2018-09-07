@@ -1,0 +1,16 @@
+:host {
+    height: 100%;
+    width: 100%;
+    display: flex;
+}
+#header {
+    height: 80px;
+    background: var(--info);
+}
+#content {
+    overflow: auto;
+}
+#footer {
+    height: 40px;
+    background: var(--info);
+}

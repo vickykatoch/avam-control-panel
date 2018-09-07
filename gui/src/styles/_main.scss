@@ -1,0 +1,10 @@
+.f-fill {
+    flex-grow: 1;
+}
+.f-no-shrink {
+    flex-shrink: 0;
+}
+body {
+    height: 100vh;
+    width: 100vw;
+}
