@@ -1,21 +1,31 @@
 const express = require('express');
-const appRouter = require('./api/routes');
-const bodyParser =  require('body-parser');
+var logger = require('morgan');
+const db = require('./db');
+const apiRoutes = require('./api/routes');
+const bodyParser = require('body-parser');
 const cors = require('cors');
 const config = require('./config/config');
-const db = require('./db');
+
 
 const app = express();
 const router = express.Router();
+app.use(logger('dev'));
 app.use(router);
 app.use(cors());
 app.use(bodyParser.json());
-appRouter.registerRoutes(app);
+
+app.use('/api', apiRoutes);
 
 app.get('/', (req, res) => {
     res.json({ status: 'OK' });
 });
 
-app.listen(config.port, () => {
-    console.log('Control Panel server is listening on port: ' + config.port);
+db.sequelize.sync({ force : true}).then(() => {
+    console.log('Database connection established successfully');
+    
+    require('./config/data-builder')(db);
+
+    app.listen(config.port, () => {
+        console.log('Control Panel server is listening on port: ' + config.port);
+    });
 });

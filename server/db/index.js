@@ -1,93 +1,35 @@
-const { Sequelize, DataTypes } = require('sequelize');
+const Sequelize = require('sequelize');
 const path = require('path');
-
+var fs = require('fs');
+const db = {};
+const modelFiles = [
+    'models/admin/user-model.js',
+    'models/admin/role-model.js',
+    'models/admin/resource-model.js',
+    'models/admin/role-resource-model.js',
+];
 
 const sequelize = new Sequelize('database', 'user', 'password', {
     host: 'localhost',
     dialect: 'sqlite',
-    storage: path.join(__dirname, 'database.db')
+    storage: path.join(__dirname, 'database.db'),
+    operatorsAliases: false
 });
 
-const User = sequelize.define('User', {
-    userId: {
-        type: DataTypes.STRING,
-        primaryKey: true
-    },
-    password: DataTypes.STRING,
-    name: DataTypes.STRING,
-    isActive: {
-        type: DataTypes.BOOLEAN,
-        defaultValue: true
+modelFiles.forEach(filePath => {
+    const model = sequelize.import(path.join(__dirname, filePath));
+    db[model.name] = model;
+});
+Object.keys(db).forEach(modelName => {
+    if (db[modelName].associate) {
+        db[modelName].associate(db);
     }
 });
-const Role = sequelize.define('Role', {
-    id: {
-        type: Sequelize.DataTypes.INTEGER,
-        primaryKey: true,
-        autoIncrement: true
-    },
-    name: DataTypes.STRING,
-    isActive: {
-        type: DataTypes.BOOLEAN,
-        defaultValue: true
-    },
-    isAdmin: {
-        type: DataTypes.BOOLEAN,
-        defaultValue: false
-    }
-});
-User.belongsToMany(Role, {
-    through: 'UserRoles',
-    foreignKey: 'userId'
-});
-Role.belongsToMany(User, {
-    through: 'UserRoles',
-    foreignKey: 'roleId',
-    sourceKey : 'id'
-});
 
-const Resource = sequelize.define('Resource', {
-    id: {
-        type: Sequelize.DataTypes.INTEGER,
-        primaryKey: true,
-        autoIncrement: true
-    },
-    name: DataTypes.STRING,
-    type: DataTypes.STRING,
-    isActive: {
-        type: DataTypes.BOOLEAN,
-        defaultValue: true
-    }    
-});
-
-const RoleResource = sequelize.define('RoleResource', {
-    permissions: {
-        type: Sequelize.DataTypes.INTEGER,
-        defaaultValue : 0
-    }  
-});
-
-Role.belongsToMany(Resource, {
-    through: RoleResource,
-    foreignKey: 'roleId',
-    sourceKey : 'id'
-});
-Resource.belongsToMany(Role, {
-    through: RoleResource,
-    foreignKey: 'resourceId',
-    sourceKey : 'id'
-});
+db.sequelize = sequelize;
+db.Sequelize = Sequelize;
+module.exports = db
 
 
 
-sequelize.sync({
-    force: true
-}).then(() => {
-    User.create({
-        userId: 'bk',
-        password: '45325',
-        name: 'Balwinder Katoch'
-    });
-}).catch(error => {
-    console.error(error);
-})
+

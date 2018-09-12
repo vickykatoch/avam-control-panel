@@ -1,18 +1,18 @@
 const db = require('../../db');
 
 const fetchById = (req, res) => {
-    const id = req.params.id;
-    db.Role.findById(id)
-        .then(role => {
-            res.json(role);
+    const userId = req.params.id;
+    db.User.findById(userId)
+        .then(user => {
+            res.json(user);
         }).catch(error => {
             res.json({ error: 'Error occurred' });
         });
 };
 const fetchAll = (req, res) => {
-    db.Role.findAll()
-        .then(roles => {
-            res.json(roles);
+    db.User.findAll()
+        .then(users => {
+            res.json(users);
         }).catch(error => {
             res.json({ error: 'Error occurred' });
         });
