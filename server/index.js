@@ -20,12 +20,19 @@ app.get('/', (req, res) => {
     res.json({ status: 'OK' });
 });
 
-db.sequelize.sync({ force : true}).then(() => {
+db.sequelize.sync({ 
+    logging : console.log,
+    force : true
+}).then(() => {
     console.log('Database connection established successfully');
-    
     require('./config/data-builder')(db);
-
     app.listen(config.port, () => {
         console.log('Control Panel server is listening on port: ' + config.port);
     });
 });
+// db.sequelize.authenticate().then(() => {
+//     console.log('Database connection established successfully');
+//     app.listen(config.port, () => {
+//         console.log('Control Panel server is listening on port: ' + config.port);
+//     });
+// });
