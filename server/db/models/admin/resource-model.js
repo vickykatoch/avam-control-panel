@@ -15,6 +15,7 @@ module.exports = (sequelize, DataTypes) => {
 
     Resource.associate = (models) => {
         models.Resource.belongsToMany(models.Role, {
+            as : 'roles',
             through: models.RoleResource,
             foreignKey: 'resourceId',
             sourceKey: 'id'
