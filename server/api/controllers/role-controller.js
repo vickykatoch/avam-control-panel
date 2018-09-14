@@ -1,20 +1,27 @@
 const db = require('../../db');
 
+//#region ASSOCIATION INCLUDES
+const userIncludes = {
+    model: db.User,
+    as: 'users',
+    through: {
+        attributes: []
+    }
+};
+const resourceInclude = {
+    model: db.Resource,
+    as: 'resources',
+    through: {
+        as: 'acl',
+        attributes: ['permissions']
+    }
+};
+//#endregion
+
+//#region CRUD OPERATIONS
 const fetchById = (req, res) => {
     const id = req.params.id;
-    db.Role.findById(id, {
-            include: [{
-                model: db.User,
-                as: 'users'
-            },{
-                model: db.Resource,
-                as: 'resources',
-                // include : [{
-                //     model : db.RoleResource,
-
-                // }]
-            }]
-        })
+    db.Role.findById(id, { include: [userIncludes, resourceInclude] })
         .then(role => {
             res.json(role);
         }).catch(error => {
@@ -24,16 +31,9 @@ const fetchById = (req, res) => {
             });
         });
 };
+
 const fetchAll = (req, res) => {
-    db.Role.findAll({
-            include: [{
-                model: db.User,
-                as: 'users'
-            },{
-                model: db.Resource,
-                as: 'resources'
-            }]
-        })
+    db.Role.findAll({ include: [userIncludes, resourceInclude] })
         .then(roles => {
             res.json(roles);
         }).catch(error => {
@@ -44,7 +44,11 @@ const fetchAll = (req, res) => {
         });
 };
 
+//#endregion
+
+//#region EXPORTS
 module.exports = {
     fetchById,
     fetchAll
 };
+//#endregion

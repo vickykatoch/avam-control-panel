@@ -5,6 +5,10 @@ const resourceController = require('./controllers/resource-controller');
 
 router.get('/users', userController.fetchAll);
 router.get('/users/:id', userController.fetchById);
+router.post('/users/new', userController.addEntity);
+router.put('/users/update', userController.updateEntity);
+router.delete('/users/remove', userController.removeEntity);
+
 router.get('/roles', roleController.fetchAll);
 router.get('/roles/:id', roleController.fetchById);
 router.get('/resources', resourceController.fetchAll);
