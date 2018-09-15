@@ -4,11 +4,24 @@ import { SignInComponent } from './components/sign-in/sign-in.component';
 import { UserListComponent } from './components/user-list/user-list.component';
 import { RolesListComponent } from './components/roles-list/roles-list.component';
 import { ResourceListComponent } from './components/resource-list/resource-list.component';
+import { SharedModule } from '../shared';
 
 @NgModule({
   imports: [
-    CommonModule
+    CommonModule,
+    SharedModule
   ],
-  declarations: [SignInComponent, UserListComponent, RolesListComponent, ResourceListComponent]
+  declarations: [
+    SignInComponent,
+    UserListComponent,
+    RolesListComponent,
+    ResourceListComponent
+  ],
+  exports :[
+    SignInComponent,
+    UserListComponent,
+    RolesListComponent,
+    ResourceListComponent
+  ]
 })
 export class UserAdminModule { }

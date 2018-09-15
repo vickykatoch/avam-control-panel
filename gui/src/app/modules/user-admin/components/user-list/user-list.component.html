@@ -1,3 +1,82 @@
-<p>
-  user-list works!
-</p>
+<div class="d-flex flex-fill flex-column">
+  <div class="d-flex flex-no-shrink">
+    <div class="flex-fill">
+      <button class="btn btn-sm btn-primary">New</button>
+    </div>
+    <div class="d-flex flex-fill justify-content-end">
+      <div class="btn-group" role="group">
+        <button class="btn btn-sm btn-outline-primary">
+          <i class="fa fa-step-backward" aria-hidden="true"></i>
+        </button>
+        <button class="btn btn-sm btn-outline-primary">
+          <i class="fa fa-caret-left" aria-hidden="true"></i>
+        </button>
+        <button class="btn btn-sm btn-outline-primary">
+          <i class="fa fa-caret-right" aria-hidden="true"></i>
+        </button>
+        <button class="btn btn-sm btn-outline-primary">
+          <i class="fa fa-step-forward" aria-hidden="true"></i>
+        </button>
+
+      </div>
+    </div>
+  </div>
+  <table class="table table-sm table-bordered table-hover">
+    <thead>
+      <tr>
+        <th>User ID</th>
+        <th>Name</th>
+        <th>Is Active</th>
+        <th>Created On</th>
+        <th>Last Update</th>
+        <th>Roles</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td colspan="7" *ngIf="!editUser">
+          <ng-container *ngTemplateOutlet="userDetailsTemplate">
+
+          </ng-container>
+        </td>
+      </tr>
+      <tr *ngFor="let user of users">
+        <td>{{user.userId}}</td>
+        <td>{{user.name}}</td>
+        <td>{{user.isActive}}</td>
+        <td>{{user.createdAt | dateFormat}}</td>
+        <td>{{user.updatedAt | dateFormat}}</td>
+        <td></td>
+        <td class="text-right">
+          <div class="btn-group" role="group">
+            <button class="btn btn-sm btn-primary">Edit</button>
+            <button class="btn btn-sm btn-primary">Details...</button>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+
+<ng-template #userDetailsTemplate>
+  <form class="d-flex flex-column" novalidate>
+    <div class="form-group">
+      <label for="">User ID</label>
+      <input type="text" class="form-control">
+    </div>
+    <div class="form-group">
+      <label for="">Name</label>
+      <input type="text" class="form-control">
+    </div>
+    <div class="form-check">
+      <input type="checkbox" class="form-check-input" id="isActive">
+      <label class="form-check-label" for="isActive">Is Active</label>
+    </div>
+    <div class="text-right">
+      <button class="btn-sm btn-outline-danger">Cancel</button>
+      <button class="btn-sm btn-outline-primary">Save</button>
+    </div>
+  </form>
+</ng-template>

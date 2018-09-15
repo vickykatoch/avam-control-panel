@@ -11,6 +11,7 @@
     "experimentalDecorators": true,
     "target": "es5",
     "types": ["jest"],
+    "allowSyntheticDefaultImports": true,
     "typeRoots": [
       "node_modules/@types"
     ],
