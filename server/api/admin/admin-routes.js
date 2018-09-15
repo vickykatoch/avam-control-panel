@@ -1,11 +1,19 @@
-const userRouter = require('./controllers/admin/user-routes');
+const userRouter = require('./routes/user-routes');
+const roleRouter = require('./routes/role-routes');
+const resourceRouter = require('./routes/resource-routes');
+
 const router = require('express').Router();
+
+
 router.use('/users', userRouter);
+router.use('/roles', roleRouter);
+router.use('/resources', resourceRouter);
+
+module.exports = router;
 
 
-
-const roleController = require('./controllers/admin/role-controller');
-const resourceController = require('./controllers/admin/resource-controller');
+// const roleController = require('./controllers/role-controller');
+// const resourceController = require('../controllers/admin/resource-controller');
 
 
 
@@ -22,4 +30,4 @@ const resourceController = require('./controllers/admin/resource-controller');
 // router.put('/resources/update', resourceController.updateEntity);
 // router.delete('/resources/remove', resourceController.removeEntity);
 
-module.exports = router;
+
