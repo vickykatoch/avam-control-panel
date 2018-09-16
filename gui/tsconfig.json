@@ -10,7 +10,9 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "target": "es5",
-    "types": ["jest"],
+    "types": [
+      "jest"
+    ],
     "allowSyntheticDefaultImports": true,
     "typeRoots": [
       "node_modules/@types"
@@ -18,6 +20,14 @@
     "lib": [
       "es2017",
       "dom"
-    ]
+    ],
+    "paths": {
+      "avam-tab-panel": [
+        "dist/avam-tab-panel"
+      ],
+      "avam-tab-panel/*": [
+        "dist/avam-tab-panel/*"
+      ]
+    }
   }
 }
