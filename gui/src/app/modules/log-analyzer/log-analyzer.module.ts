@@ -10,3 +10,4 @@ import { LogDashboardComponent } from './components/log-dashboard/log-dashboard.
   exports : [ LogDashboardComponent]
 })
 export class LogAnalyzerModule { }
+

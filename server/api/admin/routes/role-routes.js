@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const roleController = require('../controllers/user-controller');
+const roleController = require('../controllers/role-controller');
 
 router.get('/', roleController.fetchAll);
 router.get('/:id', roleController.fetchById);

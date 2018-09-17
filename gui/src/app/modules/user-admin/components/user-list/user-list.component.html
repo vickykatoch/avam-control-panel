@@ -1,61 +1,68 @@
-<div class="d-flex flex-fill flex-column">
-  <div class="d-flex flex-no-shrink">
-    <div class="flex-fill">
-      <button class="btn btn-sm btn-primary">New</button>
+<div class="d-flex flex-column flex-fill">
+  <div class="d-flex">
+    <div class="d-flex flex-fill">
+      <h5>User List :</h5>
     </div>
     <div class="d-flex flex-fill justify-content-end">
       <div class="btn-group" role="group">
-        <button class="btn btn-sm btn-outline-primary">
-          <i class="fa fa-step-backward" aria-hidden="true"></i>
-        </button>
-        <button class="btn btn-sm btn-outline-primary">
-          <i class="fa fa-caret-left" aria-hidden="true"></i>
-        </button>
-        <button class="btn btn-sm btn-outline-primary">
-          <i class="fa fa-caret-right" aria-hidden="true"></i>
-        </button>
-        <button class="btn btn-sm btn-outline-primary">
-          <i class="fa fa-step-forward" aria-hidden="true"></i>
-        </button>
-
+        <button class="btn btn-sm btn-outline-primary" (click)="onRefresh()">Refresh</button>
+        <button class="btn btn-sm btn-outline-primary" (click)="newUser.next()">New User</button>
       </div>
     </div>
   </div>
-  <table class="table table-sm table-bordered table-hover">
-    <thead>
-      <tr>
-        <th>User ID</th>
-        <th>Name</th>
-        <th>Is Active</th>
-        <th>Created On</th>
-        <th>Last Update</th>
-        <th>Roles</th>
-        <th></th>
-      </tr>
-      <tr>
-        <td colspan="7" *ngIf="!editUser">
-          <avam-edit-user></avam-edit-user>
-        </td>
-      </tr>
-    </thead>
-    <tbody>
-
-      <tr *ngFor="let user of users">
-        <td>{{user.userId}}</td>
-        <td>{{user.name}}</td>
-        <td>{{user.isActive}}</td>
-        <td>{{user.createdAt | dateFormat}}</td>
-        <td>{{user.updatedAt | dateFormat}}</td>
-        <td></td>
-        <td class="text-right">
-          <div class="btn-group" role="group">
-            <button class="btn btn-sm btn-primary">Edit</button>
-            <button class="btn btn-sm btn-primary">Details...</button>
-          </div>
-        </td>
-      </tr>
-    </tbody>
-  </table>
+  <div class="d-flex mt-2">
+    <table class="table table-sm table-bordered table-hover">
+      <thead>
+        <tr>
+          <th>User ID</th>
+          <th>Name</th>
+          <th>Is Active</th>
+          <th>Created On</th>
+          <th>Last Update</th>
+          <th>Roles</th>
+          <th></th>
+        </tr>
+        <tr *ngIf="isBz">
+          <td colspan="7">
+            <span>
+              <i class="fa fa-spinner fa-spin fa-2x" aria-hidden="true"></i>
+              <strong class="ml-2">Loading, please wait...</strong>
+            </span>
+          </td>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let user of users">
+          <td>{{user.userId}}</td>
+          <td>{{user.name}}</td>
+          <td>{{user.isActive}}</td>
+          <td>{{user.createdAt | dateFormat}}</td>
+          <td>{{user.updatedAt | dateFormat}}</td>
+          <td></td>
+          <td class="text-right">
+            <div class="btn-group" role="group">
+              <button class="btn btn-sm btn-outline-primary" (click)="editUser.next(user.userId)">Edit</button>
+              <button class="btn btn-sm btn-outline-primary">Details...</button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="d-flex justify-content-end" *ngIf="!isBz">
+    <div class="btn-group" role="group">
+      <button class="btn btn-sm btn-outline-primary">
+        <i class="fa fa-step-backward" aria-hidden="true"></i>
+      </button>
+      <button class="btn btn-sm btn-outline-primary">
+        <i class="fa fa-caret-left" aria-hidden="true"></i>
+      </button>
+      <button class="btn btn-sm btn-outline-primary">
+        <i class="fa fa-caret-right" aria-hidden="true"></i>
+      </button>
+      <button class="btn btn-sm btn-outline-primary">
+        <i class="fa fa-step-forward" aria-hidden="true"></i>
+      </button>
+    </div>
+  </div>
 </div>
-
-

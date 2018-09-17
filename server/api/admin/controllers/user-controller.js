@@ -7,7 +7,15 @@ const roleIncludes = {
     as: 'roles',
     through: {
         attributes: []
-    }
+    },
+    include: [{
+        model: DB.Resource,
+        as: 'resources',
+        through: {
+            as: 'acl',
+            attributes: ['permissions']
+        }
+    }]
 };
 
 //#endregion
@@ -15,14 +23,15 @@ const roleIncludes = {
 //#region CRUD OPERATIONS
 const fetchById = (req, res) => {
     const userId = req.params.id;
-    DB.User.findById(userId, { include: [roleIncludes] }).then(user => {
-        res.json(user);
-    }).catch(error => {
-        res.json({
-            error: error.message,
-            stack: error.stack
+    DB.User.findById(userId, { include: [roleIncludes] })
+        .then(user => {
+            res.json(user);
+        }).catch(error => {
+            res.json({
+                error: error.message,
+                stack: error.stack
+            });
         });
-    });
 };
 const fetchAll = (req, res) => {
     DB.User.findAll({ include: [roleIncludes] })
@@ -35,31 +44,17 @@ const fetchAll = (req, res) => {
             });
         });
 };
-const addEntity = (req, res) => {
-    DB.User.create(req.body).then(user=> {
+const addUpdateEntity = (req, res) => {
+    DB.User.upsert(req.body).then(user => {
         res.status(200).json(user);
-    }).catch(err=> {
+    }).catch(err => {
         res.status(400).json({
             error: err.message,
             stack: err.stack
         });
-    });    
+    });
 };
-const updateEntity = (req, res) => {
-    const userId = req.body.userId;
-    DB.User.update(req.body, { 
-        where : {
-            userId : userId
-        }
-    }).then(user=> {
-        res.status(200).json(user);
-    }).catch(err=> {
-        res.status(400).json({
-            error: err.message,
-            stack: err.stack
-        });
-    });    
-};
+
 const removeEntity = (req, res) => {
     res.status(200);
 }
@@ -69,8 +64,7 @@ const removeEntity = (req, res) => {
 module.exports = {
     fetchById,
     fetchAll,
-    addEntity,
-    updateEntity,
+    addUpdateEntity,
     removeEntity
 };
 //#endregion

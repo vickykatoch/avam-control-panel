@@ -9,12 +9,18 @@ import { EditUserComponent } from './components/edit-user/edit-user.component';
 import { NewEditRoleComponent } from './components/new-edit-role/new-edit-role.component';
 import { AvamTabPanelModule } from 'avam-tab-panel';
 import { UserAdminComponent } from './user-admin.component';
+import { HttpClientModule } from '@angular/common/http';
+import { UserService } from './services';
+import { UserHostComponent } from './components/user-host/user-host.component';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   imports: [
     CommonModule,
     SharedModule,
-    AvamTabPanelModule
+    AvamTabPanelModule,
+    HttpClientModule,
+    ReactiveFormsModule
   ],
   declarations: [
     SignInComponent,
@@ -23,7 +29,11 @@ import { UserAdminComponent } from './user-admin.component';
     ResourceListComponent,
     EditUserComponent,
     NewEditRoleComponent,
-    UserAdminComponent
+    UserAdminComponent,
+    UserHostComponent
+  ],
+  providers : [
+    UserService
   ],
   exports :[
     SignInComponent,

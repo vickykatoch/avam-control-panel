@@ -14,7 +14,7 @@ const fallbackRoute = {
 
 export const routeConfig = [
     {
-        path: 'home',
+        path: '',
         component: DashboardComponent
     },
     {

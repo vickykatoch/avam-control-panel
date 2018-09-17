@@ -1,3 +1,5 @@
+import { Resource } from "./resource";
+
 export interface Role {
   id: number;
   name: string;
@@ -6,4 +8,5 @@ export interface Role {
   noDelete?:boolean;
   createdAt?: Date;
   updatedAt?: Date;
+  resources?: Resource[];
 }
