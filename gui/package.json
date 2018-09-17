@@ -8,7 +8,7 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "build:tp" : "ng build --prod avam-tab-panel"
+    "build:tp": "ng build --prod avam-tab-panel"
   },
   "private": true,
   "dependencies": {
