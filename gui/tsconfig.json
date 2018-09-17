@@ -27,6 +27,12 @@
       ],
       "avam-tab-panel/*": [
         "dist/avam-tab-panel/*"
+      ],
+      "avam-common-controls": [
+        "dist/avam-common-controls"
+      ],
+      "avam-common-controls/*": [
+        "dist/avam-common-controls/*"
       ]
     }
   }

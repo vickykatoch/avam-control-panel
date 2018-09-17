@@ -13,6 +13,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { UserService } from './services';
 import { UserHostComponent } from './components/user-host/user-host.component';
 import { ReactiveFormsModule } from '@angular/forms';
+import { AvamCommonControlsModule } from 'avam-common-controls';
 
 @NgModule({
   imports: [
@@ -20,7 +21,8 @@ import { ReactiveFormsModule } from '@angular/forms';
     SharedModule,
     AvamTabPanelModule,
     HttpClientModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    AvamCommonControlsModule
   ],
   declarations: [
     SignInComponent,
