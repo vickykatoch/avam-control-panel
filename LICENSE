@@ -1,5 +1,5 @@
 MIT License
-
+git rm -r --cached server/db/database.db
 Copyright (c) 2018 Balwinder Katoch
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
