@@ -24,7 +24,7 @@ const fetchById = (req, res) => {
         });
 };
 const fetchAll = (req, res) => {
-    DB.Resource.findAll( { include: [roleIncludes] })
+    DB.Resource.findAll({ include: [roleIncludes] })
         .then(resources => {
             res.json(resources);
         }).catch(error => {
@@ -51,7 +51,7 @@ const updateEntity = (req, res) => {
             id: resourceId
         }
     }).then(updates => {
-        res.status(200).json({ recordsUpdated : updates.length});
+        res.status(200).json({ recordsUpdated: updates.length });
     }).catch(err => {
         res.status(400).json({
             error: err.message,
@@ -62,9 +62,10 @@ const updateEntity = (req, res) => {
 const removeEntity = (req, res) => {
     const roleId = req.body.id;
     res.status(200).json({
-        status : 'Method not yet implemented'
+        status: 'Method not yet implemented'
     });
 }
+
 //#endregion
 
 //#region EXPORTS

@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { User } from '../../store/models/user';
+import { UserService } from '../../services';
 
 @Component({
   selector: 'avam-user-list',
@@ -8,43 +9,34 @@ import { User } from '../../store/models/user';
 })
 export class UserListComponent implements OnInit {
   users: User[] = [];
+  isBz = true;
+  @Output() editUser = new EventEmitter<string>();
+  @Output() newUser = new EventEmitter();
 
-  constructor() {
-    this.users = this.buildGridData();
-   }
-
-  ngOnInit() {
+  constructor(private userService: UserService) {
   }
 
-  // #region Temp Code
-  private buildGridData() : User[] {
-    return [
-      {
-        userId : 'GR867843',
-        name : 'Balwinder Katoch',
-        isActive : true,
-        createdAt: new Date('2018-09-15 00:47:06.704 +00:00'),
-        updatedAt: new Date('2018-09-15 00:47:06.704 +00:00')
-      }, {
-        userId : 'HR867843',
-        name : 'Aryan Katoch',
-        isActive : true,
-        createdAt: new Date('2018-09-15 00:47:06.704 +00:00'),
-        updatedAt: new Date('2018-09-15 00:47:06.704 +00:00')
-      }, {
-        userId : 'HT56843',
-        name : 'Aadi Katoch',
-        isActive : true,
-        createdAt: new Date('2018-09-15 00:47:06.704 +00:00'),
-        updatedAt: new Date('2018-09-15 00:47:06.704 +00:00')
-      }, {
-        userId : 'MJ5645643',
-        name : 'Mamta Katoch',
-        isActive : true,
-        createdAt: new Date('2018-09-15 00:47:06.704 +00:00'),
-        updatedAt: new Date('2018-09-15 00:47:06.704 +00:00')
-      }
-    ];
+  ngOnInit() {
+    this.fetchUsers();
+  }
+
+  //#region Event Handlers
+  onRefresh() {
+    this.fetchUsers();
+  }
+
+  //#endregion
+
+  // #region Helper Methods
+  private fetchUsers() {
+    this.isBz = true;
+    this.userService.fetchAll()
+      .then(users => {
+        setTimeout(() => {
+          this.users = users;
+          this.isBz = false;
+        }, 500);
+      }).catch(error => console.error(error));
   }
   //#endregion
 }

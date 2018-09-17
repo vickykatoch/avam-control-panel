@@ -1,0 +1,4 @@
+<avam-user-list (editUser)="onNewOrEditUser($event)" (newUser)="onNewOrEditUser()" *ngIf="!isSingleUserShown"></avam-user-list>
+<avam-edit-user *ngIf="isSingleUserShown" (userSavedOrClosed)="onUserSavedOrClosed()" [userId]="userId">
+
+</avam-edit-user>

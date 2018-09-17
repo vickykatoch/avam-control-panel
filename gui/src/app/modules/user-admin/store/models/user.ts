@@ -1,3 +1,5 @@
+import { Role } from "./role";
+import { Resource } from "./resource";
 
 
 export interface User {
@@ -7,4 +9,6 @@ export interface User {
   noDelete?:boolean;
   createdAt?: Date;
   updatedAt?: Date;
+  roles?: Role[];
+  resources?: Resource[];
 }
