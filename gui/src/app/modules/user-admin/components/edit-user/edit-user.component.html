@@ -28,8 +28,10 @@
     <div class="d-flex flex-fill flex-column mr-2">
       <div class="d-flex text-white bg-dark p-1">
         <h5 class="flex-fill">Roles</h5>
-        <div class="flex-fill">
-          <input type="text" class="form-control form-control-sm" placeholder="Search & add role...">
+        <div class="flex-fill search-host">
+          <input type="text" class="form-control form-control-sm"
+          [acSearchAndFilter]="onSearch"
+           placeholder="Search & add role..." autocomplete >
         </div>
 
       </div>
@@ -77,7 +79,6 @@
       </table>
     </div>
   </div>
-
   <div class="text-right mt-3">
     <div class="btn-group" role="group">
       <button class="btn btn-sm btn-outline-danger" (click)="userSavedOrClosed.next()"> Cancel</button>

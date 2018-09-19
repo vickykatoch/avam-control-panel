@@ -35,11 +35,41 @@ const fetchById = (req, res) => {
 };
 
 const fetchAll = (req, res) => {
+    const name = req.query['name'];
+    const filter = {
+        where: {
+            name: {
+                [DB.Sequelize.Op.like]: `${name}%`
+            }
+        }
+    };
+    const promise = !name ? DB.Role.findAll({
+        include: [userIncludes, resourceInclude]
+    }) : DB.Role.findAll(filter);
+
+
+    promise.then(roles => {
+        res.json(roles);
+    }).catch(error => {
+        res.json({
+            error: error.message,
+            stack: error.stack
+        });
+    });
+};
+const findbyName = (req, res) => {
+    console.log('FINDBYNAMe');
+    const name = req.query['name'];
+    debugger;
     DB.Role.findAll({
-            include: [userIncludes, resourceInclude]
+            where: {
+                name: {
+                    [DB.Sequelize.Op.like]: `'${name}%'`
+                }
+            }
         })
         .then(roles => {
-            res.json(roles);
+            res.status(200).json(roles);
         }).catch(error => {
             res.json({
                 error: error.message,
@@ -76,7 +106,7 @@ const updateEntity = (req, res) => {
 const removeEntity = (req, res) => {
     const roleId = req.body.id;
     res.status(200).json({
-        status : 'Method not yet implemented'
+        status: 'Method not yet implemented'
     });
 }
 //#endregion
@@ -85,6 +115,7 @@ const removeEntity = (req, res) => {
 module.exports = {
     fetchById,
     fetchAll,
+    findbyName,
     addEntity,
     updateEntity,
     removeEntity

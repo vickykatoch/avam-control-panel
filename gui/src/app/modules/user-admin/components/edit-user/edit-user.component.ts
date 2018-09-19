@@ -1,6 +1,6 @@
 import { Component, OnInit, EventEmitter, Output, Input } from '@angular/core';
-import { UserService, ResourceService } from '../../services';
-import { User } from '../../store/models';
+import { UserService, RoleService } from '../../services';
+import { User, Role } from '../../store/models';
 import { FormGroup, FormBuilder } from '@angular/forms';
 
 @Component({
@@ -16,7 +16,7 @@ export class EditUserComponent implements OnInit {
   userFormGroup: FormGroup;
 
   constructor(private userService: UserService, private fb: FormBuilder,
-    private resourceService: ResourceService) {
+    private roleService: RoleService) {
 
   }
 
@@ -50,5 +50,8 @@ export class EditUserComponent implements OnInit {
         this.userSavedOrClosed.next();
         e.preventDefault();
       }).catch(console.error);
+  }
+  onSearch(filterString: string) : Promise<Role[]> {
+    return this.roleService.findByName(filterString);
   }
 }
