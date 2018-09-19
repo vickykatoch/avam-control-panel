@@ -45,8 +45,30 @@ const fetchAll = (req, res) => {
         });
 };
 const addUpdateEntity = (req, res) => {
+    const usr = req.body;
+    const roles = usr.roles && usr.roles.length ? usr.roles.map(role => role.id) : [];
     DB.User.upsert(req.body).then(user => {
-        res.status(200).json(user);
+        if (user) {
+            user.setRoles(roles).then(x => {
+                res.status(200).json(user);
+            }).catch(error => {
+                res.status(400).json({
+                    error: err.message,
+                    stack: err.stack
+                });
+            });
+        } else {
+            DB.User.findById(usr.userId).then(user => {
+                user.setRoles(roles).then(x => {
+                    res.status(200).json(user);
+                }).catch(error => {
+                    res.status(400).json({
+                        error: err.message,
+                        stack: err.stack
+                    });
+                });
+            });
+        }
     }).catch(err => {
         res.status(400).json({
             error: err.message,

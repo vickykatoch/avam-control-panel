@@ -4,7 +4,22 @@
     top: 100%;
     right: 0;
     background: #fff;
-    color: #000;
-    border-style: solid;
-    border: 1px 1px 1px 3px solid #000000;
+    list-style: none;
+    color:#000;
+    margin: 0;
+    padding: 0;
+    box-shadow: 0 1px 16px 0 rgba(0, 0, 0, 0.2), 0 2px 8px 0 rgba(0, 0, 0, 0.14), 0 4px 8px -1px rgba(0, 0, 0, 0.12);
+
+    li {
+      border-bottom: 1px solid #ccc;
+      padding-left: 5px;
+    }
+    li:hover {
+      background: var(--primary);
+      color:#fff;
+      cursor: pointer;
+    }
+    li:last-child {
+      border: none;
+    }
   }

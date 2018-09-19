@@ -6,7 +6,10 @@ import {
   Input,
   ViewChild,
   HostListener,
-  TemplateRef
+  TemplateRef,
+  Output,
+  EventEmitter,
+  Renderer2
 } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { Subscription, Subject } from "rxjs";
@@ -33,13 +36,15 @@ export class AutoCompleteComponent implements OnInit, OnDestroy {
 
   //#region External Input/Output
   @Input() acUrl: string = '';
-  @Input() acAllowEmpty = false;
+  @Input() acDisplayField = '';
   @Input() acList = [];
   @Input() acSearchAndFilter: Function;
+  @Output('acItemSelected') itemSelected = new EventEmitter<any>();
   //#endregion
 
   //#region ctor
   constructor(private element: ElementRef,
+    private renderer: Renderer2,
     private viewContainer: ViewContainerRef,
     private http: HttpClient,
     private cd: ChangeDetectorRef) {
@@ -49,22 +54,15 @@ export class AutoCompleteComponent implements OnInit, OnDestroy {
   //#region NG Lifecycle
   ngOnInit() {
     this.setup();
-    console.log(this.element);
   }
   ngOnDestroy() {
     this.clearAllSubscriptions();
   }
   //#endregion
 
-  //#region Helper Methods
-  private setup() {
-    this.subscriptions.push(this.listenKeyEvents());
-    this.viewContainer.createEmbeddedView(this.defaultTemplate);
-    this.cd.markForCheck();
-  }
+  //#region Event Handlers
   @HostListener('keyup', ['$event'])
   keyUp(keyEvent: KeyboardEvent) {
-    debugger;
     keyEvent.preventDefault();
     keyEvent.stopPropagation();
     this.keyPressed$.next(keyEvent);
@@ -75,6 +73,23 @@ export class AutoCompleteComponent implements OnInit, OnDestroy {
     // keyEvent.stopPropagation();
     // this.actionKeyPressed$.next(keyEvent);
   }
+  onItemSelected(item: any) {
+    this.isShowingResult=false;
+    this.searchText='';
+    this.renderer.setProperty(this.element.nativeElement,'value','');
+    this.searchResult=[];
+    this.itemSelected.next(item);
+  }
+  //#endregion
+
+
+  //#region Helper Methods
+  private setup() {
+    this.subscriptions.push(this.listenKeyEvents());
+    this.viewContainer.createEmbeddedView(this.defaultTemplate);
+    this.cd.markForCheck();
+  }
+
   private listenKeyEvents(): Subscription {
     const subscription = this.keyPressed$.pipe(
       filter(e => validateNonCharKeyCode(e.keyCode)),
@@ -82,16 +97,29 @@ export class AutoCompleteComponent implements OnInit, OnDestroy {
       debounceTime(200),
       concat(),
       distinctUntilChanged(),
-      filter((query: string) => this.acAllowEmpty || query.length > 0),
+      filter((query: string) => {
+        if (!query.length) {
+          this.isShowingResult = false;
+          return false;
+        }
+        return true;
+      }),
       tap((query: string) => { this.searchText = query; console.log(query); }),
       switchMap((query: string) => this.suggest(query))
     ).subscribe(result => {
-      this.searchResult = result;
+      if (result && result.length) {
+        this.searchResult = result;
+        this.isShowingResult = true;
+      } else {
+        this.searchResult = [];
+        this.isShowingResult = false;
+      }
+
+
     });
     return subscription;
   }
   private suggest(query: string): any[] {
-    debugger;
     return this.acSearchAndFilter(query);
     // return this.acList && this.acList.length ? this.searchLocalList(query) : this.searchUrl();
   }
@@ -99,8 +127,9 @@ export class AutoCompleteComponent implements OnInit, OnDestroy {
     return [];
   }
   private searchUrl(): any[] {
-    return ;
+    return;
   }
+
   private onKeyPressed(keyEvent: KeyboardEvent) {
 
   }

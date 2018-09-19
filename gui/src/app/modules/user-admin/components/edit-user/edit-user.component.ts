@@ -2,6 +2,7 @@ import { Component, OnInit, EventEmitter, Output, Input } from '@angular/core';
 import { UserService, RoleService } from '../../services';
 import { User, Role } from '../../store/models';
 import { FormGroup, FormBuilder } from '@angular/forms';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'avam-edit-user',
@@ -43,15 +44,22 @@ export class EditUserComponent implements OnInit {
   }
 
   saveUser(e: Event) {
-    const user = this.userFormGroup.value;
-    this.userService.saveUser(user)
+    const usr = this.userFormGroup.value;
+    usr.roles = this.user.roles;
+    this.userService.saveUser(usr)
       .then(user => {
         console.info('User saved successfully', user);
         this.userSavedOrClosed.next();
         e.preventDefault();
       }).catch(console.error);
   }
-  onSearch(filterString: string) : Promise<Role[]> {
+  onSearch(filterString: string): Observable<Role[]> {
     return this.roleService.findByName(filterString);
+  }
+  onRoleSelected(role: Role) {
+    this.user.roles = this.user.roles || [];
+    if(!this.user.roles.some(x=> x.name===role.name)) {
+      this.user.roles.push(role);
+    }
   }
 }

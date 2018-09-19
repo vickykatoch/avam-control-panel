@@ -30,8 +30,10 @@
         <h5 class="flex-fill">Roles</h5>
         <div class="flex-fill search-host">
           <input type="text" class="form-control form-control-sm"
-          [acSearchAndFilter]="onSearch"
-           placeholder="Search & add role..." autocomplete >
+          [acDisplayField] ="'name'"
+          [acSearchAndFilter]="onSearch.bind(this)"
+          (acItemSelected)="onRoleSelected($event)"
+          placeholder="Search & add role..." autocomplete >
         </div>
 
       </div>

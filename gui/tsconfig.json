@@ -29,11 +29,17 @@
         "dist/avam-tab-panel/*"
       ],
       "avam-common-controls": [
-        "dist/avam-common-controls"
+        "modules/avam-common-controls/src/public_api.ts"
       ],
       "avam-common-controls/*": [
         "dist/avam-common-controls/*"
       ]
+      // "avam-common-controls": [
+      //   "dist/avam-common-controls"
+      // ],
+      // "avam-common-controls/*": [
+      //   "dist/avam-common-controls/*"
+      // ]
     }
   }
 }
