@@ -1,10 +1,12 @@
 const exec = require('child_process').exec;
 var fs = require('fs');
-var yargs = require('yargs').argv;
+var options = require('yargs').argv;
 const path = require('path');
 const spawn = require('child_process').spawn;
 
-console.log(yargs.modulePath);
+validateArgs();
+
+
 
 
 // compileProgram();
@@ -67,5 +69,10 @@ function updateVersion(jsonFilePath, updateType,copyTo) {
 
 }
 
+function validateArgs() {
+    if(!options.modulePath || fs.existsSync(path.join(__dirname,options.modulePath))) {
+        throw new Error("Module path provided doesn't exist");
+    } 
+}
 
 
