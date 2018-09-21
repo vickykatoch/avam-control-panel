@@ -1,0 +1,14 @@
+<div class="dd-suggest">
+  <input type="text" #searchInput>
+  <div class="search-result" *ngIf="searchResult.length">
+    <div class="search-item" *ngFor="let item of searchResult" [class.selected]="item===selectedItem" (click)="onItemSelected(item)">
+      <ng-container *ngTemplateOutlet="resolvedTemplate; context: { item : item }">
+      </ng-container>
+    </div>
+  </div>
+  <div class="backdrop" (click)="clear()" *ngIf="searchResult.length"></div>
+</div>
+
+<ng-template #defaultItemTemplate let-item="item">
+  {{item.name}}
+</ng-template>

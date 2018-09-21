@@ -32,10 +32,8 @@ export class UserListComponent implements OnInit {
     this.isBz = true;
     this.userService.fetchAll()
       .then(users => {
-        setTimeout(() => {
-          this.users = users;
-          this.isBz = false;
-        }, 500);
+        this.users = users;
+        this.isBz = false;
       }).catch(error => console.error(error));
   }
   //#endregion

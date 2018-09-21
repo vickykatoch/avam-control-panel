@@ -28,12 +28,16 @@
     <div class="d-flex flex-fill flex-column mr-2">
       <div class="d-flex text-white bg-dark p-1">
         <h5 class="flex-fill">Roles</h5>
-        <div class="flex-fill search-host">
-          <input type="text" class="form-control form-control-sm"
+        <!-- <div class="flex-fill search-host"> -->
+        <div class="flex-fill">
+          <avam-dd-suggest [itemTemplate]="searchItemTemplate" 
+          (itemSelected)="onRoleSelected($event)"
+          [searchAndFilter]="onSearch.bind(this)"></avam-dd-suggest>
+          <!-- <input type="text" class="form-control form-control-sm"
           [acDisplayField] ="'name'"
           [acSearchAndFilter]="onSearch.bind(this)"
           (acItemSelected)="onRoleSelected($event)"
-          placeholder="Search & add role..." autocomplete >
+          placeholder="Search & add role..." autocomplete > -->
         </div>
 
       </div>
@@ -65,7 +69,7 @@
       </div>
       <table class="table table-sm table-bordered table-hover">
         <thead>
-            <tr class="text-center">
+          <tr class="text-center">
             <th>Name</th>
             <th>Type</th>
             <th>Is Active</th>
@@ -88,3 +92,10 @@
     </div>
   </div>
 </form>
+
+<ng-template #searchItemTemplate let-item="item">
+  <div class="d-flex flex-fill">
+    <div class="flex-fill">{{item.id}}</div>
+    <div class="flex-fill">{{item.name}}</div>
+  </div>
+</ng-template>

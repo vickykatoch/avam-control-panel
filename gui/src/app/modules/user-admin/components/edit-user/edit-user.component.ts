@@ -40,6 +40,8 @@ export class EditUserComponent implements OnInit {
           this.user = user;
           this.userFormGroup.patchValue(user);
         }).catch(console.error);
+    } else {
+      this.user = this.userFormGroup.value;
     }
   }
 

@@ -1,0 +1,49 @@
+.dd-suggest {
+  display: flex;
+  width: 100%;
+  position: relative;
+
+  input[type="text"] {
+    width: 100%;
+    z-index: 2;
+  }
+
+  .backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.3);
+    z-index: 1;
+  }
+
+  .search-result {
+    position: absolute;
+    left: 0;
+    top: 100%;
+    right: 0;
+    z-index: 2;
+    display: flex;
+    flex-flow: column;
+
+    .search-item {
+      flex-grow: 1;
+      display: flex;
+      color: #000;
+      background: beige;
+      border-bottom: 1px solid #333;
+      padding: 2px 5px;
+    }
+    .search-item:hover {
+        background: var(--primary);
+        color:#fff;
+        cursor: pointer;
+    }
+    .selected {
+        background: var(--primary);
+        color:#fff;
+        cursor: pointer;
+      }
+  }
+}
