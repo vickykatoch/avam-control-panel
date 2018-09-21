@@ -1,5 +1,10 @@
 <div class="dd-suggest">
-  <input type="text" #searchInput>
+  <div class="search-box">
+    <input type="text" #searchInput placeholder="Search & add role...">
+    <div class="bz-box">
+      <i class="fa fa-spin fa-spinner" *ngIf="isSearching"></i>
+    </div>
+  </div>
   <div class="search-result" *ngIf="searchResult.length">
     <div class="search-item" *ngFor="let item of searchResult" [class.selected]="item===selectedItem" (click)="onItemSelected(item)">
       <ng-container *ngTemplateOutlet="resolvedTemplate; context: { item : item }">

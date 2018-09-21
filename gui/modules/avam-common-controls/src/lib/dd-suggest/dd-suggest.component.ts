@@ -31,6 +31,7 @@ export class DropDownSuggestComponent implements OnInit, OnDestroy {
     private nonCharKeyEventNotifier$ = new Subject<KeyboardEvent>();
     private charKeyEventNotifier$ = new Subject<KeyboardEvent>();
     private subscriptions: Subscription[] = [];
+    isSearching = false;
     selectedItem: any;
     //#endregion
 
@@ -117,10 +118,14 @@ export class DropDownSuggestComponent implements OnInit, OnDestroy {
                 }
                 return true;
             }),
-            switchMap((query: string) => this.search(query))
+            switchMap((query: string) => {
+                this.isSearching=true;
+                return this.search(query);
+            })
         ).subscribe(result => {
             this.searchResult = result && Array.isArray(result) && result.length ? result : [];
             !this.searchResult.length && this.clear();
+            this.isSearching=false;
         });
     }
     private listenNonCharKeyEvents() {
