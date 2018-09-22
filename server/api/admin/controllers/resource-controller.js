@@ -65,6 +65,28 @@ const removeEntity = (req, res) => {
         status: 'Method not yet implemented'
     });
 }
+const fetchByRoles = (req,res) => {
+    const roles = req.body;
+    DB.Resource.findAll({
+        include : [{
+            model : DB.Role,
+            as : 'roles',
+            attributes:[],
+            where : {
+                id : {
+                    [DB.sequelize.Op.in] :  roles
+                }
+            }
+        }]
+    }).then(roles => {
+        res.status(200).json(roles);
+    }).catch(err => {
+        res.status(400).json({
+            error: err.message,
+            stack: err.stack
+        });
+    });
+}
 
 //#endregion
 
@@ -74,6 +96,7 @@ module.exports = {
     fetchAll,
     addEntity,
     updateEntity,
-    removeEntity
+    removeEntity,
+    fetchByRoles
 };
 //#endregion

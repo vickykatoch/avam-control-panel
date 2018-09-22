@@ -24,6 +24,9 @@ export class UserListComponent implements OnInit {
   onRefresh() {
     this.fetchUsers();
   }
+  getRoleNames() : string [] {
+    return [];
+  }
 
   //#endregion
 

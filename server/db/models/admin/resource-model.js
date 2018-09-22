@@ -10,12 +10,12 @@ module.exports = (sequelize, DataTypes) => {
         isActive: {
             type: DataTypes.BOOLEAN,
             defaultValue: true
-        } 
+        }
     });
 
     Resource.associate = (models) => {
         models.Resource.belongsToMany(models.Role, {
-            as : 'roles',
+            as: 'roles',
             through: models.RoleResource,
             foreignKey: 'resourceId',
             sourceKey: 'id'

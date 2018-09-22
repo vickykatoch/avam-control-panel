@@ -49,7 +49,7 @@ const fetchAll = (req, res) => {
 
 
     promise.then(roles => {
-        res.json(roles);
+            res.status(200).json(roles);
     }).catch(error => {
         res.json({
             error: error.message,
@@ -58,9 +58,7 @@ const fetchAll = (req, res) => {
     });
 };
 const findbyName = (req, res) => {
-    console.log('FINDBYNAMe');
     const name = req.query['name'];
-    debugger;
     DB.Role.findAll({
             where: {
                 name: {
@@ -69,7 +67,10 @@ const findbyName = (req, res) => {
             }
         })
         .then(roles => {
-            res.status(200).json(roles);
+            setTimeout(() => {
+                res.status(200).json(roles);
+            }, 3000);
+
         }).catch(error => {
             res.json({
                 error: error.message,
