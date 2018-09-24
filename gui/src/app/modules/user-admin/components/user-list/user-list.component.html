@@ -38,7 +38,7 @@
           <td>{{user.isActive}}</td>
           <td>{{user.createdAt | dateFormat}}</td>
           <td>{{user.updatedAt | dateFormat}}</td>
-          <td></td>
+          <td>{{getRoleNames(user)}}</td>
           <td class="text-right">
             <div class="btn-group" role="group">
               <button class="btn btn-sm btn-outline-primary" (click)="editUser.next(user.userId)">Edit</button>

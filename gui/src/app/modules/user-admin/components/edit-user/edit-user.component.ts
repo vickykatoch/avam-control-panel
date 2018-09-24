@@ -1,5 +1,5 @@
 import { Component, OnInit, EventEmitter, Output, Input } from '@angular/core';
-import { UserService, RoleService } from '../../services';
+import { UserService, RoleService, ResourceService } from '../../services';
 import { User, Role } from '../../store/models';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { Observable } from 'rxjs';
@@ -17,7 +17,7 @@ export class EditUserComponent implements OnInit {
   userFormGroup: FormGroup;
 
   constructor(private userService: UserService, private fb: FormBuilder,
-    private roleService: RoleService) {
+    private resouceService: ResourceService, private roleService: RoleService) {
 
   }
 
@@ -40,6 +40,8 @@ export class EditUserComponent implements OnInit {
           this.user = user;
           this.userFormGroup.patchValue(user);
         }).catch(console.error);
+    } else {
+      this.user = this.userFormGroup.value;
     }
   }
 
@@ -58,8 +60,38 @@ export class EditUserComponent implements OnInit {
   }
   onRoleSelected(role: Role) {
     this.user.roles = this.user.roles || [];
-    if(!this.user.roles.some(x=> x.name===role.name)) {
+    if (!this.user.roles.some(x => x.name === role.name)) {
       this.user.roles.push(role);
+      this.resouceService.getResourcesForRoles([role])
+        .then(resources => {
+          this.user.resources = this.user.resources || [];
+          resources.forEach(res => {
+            if (!this.user.resources.some(r => r.id === res.id)) {
+              this.user.resources.push(res);
+            }
+          });
+        }).catch(error => {
+          console.error(error);
+        })
     }
   }
+  deleteRole(role: Role) {
+    this.user.roles = this.user.roles.filter(rl => rl != role);
+    if (!this.user.roles.length) {
+      this.user.resources = [];
+    } else {
+      this.resouceService.getResourcesForRoles(this.user.roles)
+        .then(resources => {
+          this.user.resources = [];
+          resources.forEach(res => {
+            if (!this.user.resources.some(r => r.id === res.id)) {
+              this.user.resources.push(res);
+            }
+          });
+        }).catch(error => {
+          console.error(error);
+        });
+    }
+  }
+  
 }

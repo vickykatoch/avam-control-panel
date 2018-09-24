@@ -1,5 +1,6 @@
 <ng-template #defaultTemplate>
+  
   <ul class="auto-complete" *ngIf="isShowingResult">
-    <li *ngFor="let item of searchResult" (click)="onItemSelected(item)">{{item[acDisplayField]}}</li>
+    <li *ngFor="let item of searchResult" [class.selected]="currentSelection === item" (click)="onItemSelected(item)">{{item[displayField]}}</li>
   </ul>
 </ng-template>

@@ -5,16 +5,16 @@
         <label for="userId">User ID</label>
         <input type="text" class="form-control form-control-sm" formControlName="userId" id="userId">
       </div>
-      <div class="d-flex flex-column flex-fill mt-3">
+      <!-- <div class="d-flex flex-column flex-fill mt-3">
         <label for="name">Display Name</label>
         <input type="text" class="form-control form-control-sm" formControlName="name" id="name">
-      </div>
+      </div> -->
 
     </div>
     <div class="d-flex flex-column flex-fill">
       <div class="d-flex flex-column ">
-        <label for="password">Password</label>
-        <input type="password" class="form-control form-control-sm" formControlName="password" id="password">
+          <label for="name">Display Name</label>
+          <input type="text" class="form-control form-control-sm" formControlName="name" id="name">
       </div>
       <div class="d-flex align-items-end flex-fill mt-3">
         <div class="form-check">
@@ -28,12 +28,10 @@
     <div class="d-flex flex-fill flex-column mr-2">
       <div class="d-flex text-white bg-dark p-1">
         <h5 class="flex-fill">Roles</h5>
-        <div class="flex-fill search-host">
-          <input type="text" class="form-control form-control-sm"
-          [acDisplayField] ="'name'"
-          [acSearchAndFilter]="onSearch.bind(this)"
-          (acItemSelected)="onRoleSelected($event)"
-          placeholder="Search & add role..." autocomplete >
+        <div class="flex-fill">
+          <avam-dd-suggest 
+          (itemSelected)="onRoleSelected($event)"
+          [searchAndFilter]="onSearch.bind(this)"></avam-dd-suggest>
         </div>
 
       </div>
@@ -53,7 +51,7 @@
             <td>{{role.isActive}}</td>
             <td>{{role.isAdmin}}</td>
             <td class="text-right">
-              <button class="btn btn-sm btn-outline-danger">Delete</button>
+              <button class="btn btn-sm btn-outline-danger" (click)="deleteRole(role)">Delete</button>
             </td>
           </tr>
         </tbody>
@@ -65,7 +63,7 @@
       </div>
       <table class="table table-sm table-bordered table-hover">
         <thead>
-            <tr class="text-center">
+          <tr class="text-center">
             <th>Name</th>
             <th>Type</th>
             <th>Is Active</th>
@@ -88,3 +86,10 @@
     </div>
   </div>
 </form>
+
+<ng-template #searchItemTemplate let-item="item">
+  <div class="d-flex flex-fill">
+    <div class="flex-fill">{{item.id}}</div>
+    <div class="flex-fill">{{item.name}}</div>
+  </div>
+</ng-template>

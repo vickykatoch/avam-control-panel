@@ -5,7 +5,7 @@ module.exports = (sequelize, DataTypes) => {
             primaryKey: true,
             validate: {
                 len: {
-                    args: [3, 8],
+                    args: [2, 25],
                     msg: 'User id must have minimum 3 and maximum 8 characters'
                 }
             }

@@ -11,6 +11,10 @@ export class ResourceService {
   constructor(private http: HttpClient) {
 
   }
-
+  getResourcesForRoles(roles: Role[]) : Promise<Resource[]> {
+    const url = `${this.baseUrl}/roles`;
+    const roleIds = roles.map(role=> role.id);
+    return this.http.post<Resource[]>(url,roleIds).toPromise()
+  }
 
 }

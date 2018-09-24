@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { Role } from '../../store/models/role';
+import { RoleService } from '../../services';
 
 @Component({
   selector: 'avam-role-list',
@@ -8,46 +9,21 @@ import { Role } from '../../store/models/role';
 })
 export class RoleListComponent implements OnInit {
   roles: Role[] = [];
+  isBz = false;
+  @Output() editRole = new EventEmitter<number>();
+  @Output() newRole = new EventEmitter();
 
-  constructor() { }
+  constructor(private roleService: RoleService) { }
 
   ngOnInit() {
-    this.roles= this.buildGridData();
+    // this.isBz=true;
+    this.roleService.fetchRoles()
+      .then(roles => this.roles = roles)
+      .catch(console.error);
+    // this.roles = this.buildGridData();
   }
 
   // #region Temp Code
-  private buildGridData() : Role[] {
-    return [
-      {
-        id : 1,
-        name : 'Administrator',
-        isActive : true,
-        isAdmin: true,
-        createdAt: new Date('2018-09-15 00:47:06.704 +00:00'),
-        updatedAt: new Date('2018-09-15 00:47:06.704 +00:00')
-      }, {
-        id : 2,
-        name : 'SuperUser',
-        isActive : true,
-        isAdmin: true,
-        createdAt: new Date('2018-09-15 00:47:06.704 +00:00'),
-        updatedAt: new Date('2018-09-15 00:47:06.704 +00:00')
-      }, {
-        id : 3,
-        name : 'Normal User',
-        isActive : false,
-        isAdmin: true,
-        createdAt: new Date('2018-09-15 00:47:06.704 +00:00'),
-        updatedAt: new Date('2018-09-15 00:47:06.704 +00:00')
-      }, {
-        id : 4,
-        name : 'Desk User',
-        isActive : true,
-        isAdmin: false,
-        createdAt: new Date('2018-09-15 00:47:06.704 +00:00'),
-        updatedAt: new Date('2018-09-15 00:47:06.704 +00:00')
-      }
-    ];
-  }
+ 
   //#endregion
 }

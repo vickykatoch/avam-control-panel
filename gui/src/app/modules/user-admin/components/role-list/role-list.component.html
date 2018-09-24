@@ -1,4 +1,69 @@
-<div class="d-flex flex-fill flex-column">
+<div class="d-flex flex-column flex-fill">
+  <div class="d-flex">
+    <div class="d-flex flex-fill">
+      <h5>Role List :</h5>
+    </div>
+    <div class="d-flex flex-fill justify-content-end">
+      <div class="btn-group" role="group">
+        <button class="btn btn-sm btn-outline-primary" (click)="onRefresh()">Refresh</button>
+        <button class="btn btn-sm btn-outline-primary" (click)="newRole.next()">New Role</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="d-flex mt-2">
+    <table class="table table-sm table-bordered table-hover">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Is Active</th>
+          <th>Is Admin</th>
+          <th>Created On</th>
+          <th>Last Update</th>
+          <th>Resources</th>
+          <th></th>
+        </tr>
+
+      </thead>
+      <tbody>
+
+        <tr *ngFor="let role of roles">
+          <td>{{role.name}}</td>
+          <td>{{role.isActive}}</td>
+          <td>{{role.isAdmin}}</td>
+          <td>{{role.createdAt | dateFormat}}</td>
+          <td>{{role.updatedAt | dateFormat}}</td>
+          <td></td>
+          <td class="text-right">
+            <div class="btn-group" role="group">
+              <button class="btn btn-sm btn-outline-primary">Edit</button>
+              <button class="btn btn-sm btn-outline-primary">Details...</button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="d-flex justify-content-end" *ngIf="!isBz">
+    <div class="btn-group" role="group">
+      <button class="btn btn-sm btn-outline-primary">
+        <i class="fa fa-step-backward" aria-hidden="true"></i>
+      </button>
+      <button class="btn btn-sm btn-outline-primary">
+        <i class="fa fa-caret-left" aria-hidden="true"></i>
+      </button>
+      <button class="btn btn-sm btn-outline-primary">
+        <i class="fa fa-caret-right" aria-hidden="true"></i>
+      </button>
+      <button class="btn btn-sm btn-outline-primary">
+        <i class="fa fa-step-forward" aria-hidden="true"></i>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- <div class="d-flex flex-fill flex-column">
   <div class="d-flex flex-no-shrink">
     <div class="flex-fill">
       <button class="btn btn-sm btn-outline-primary">New</button>
@@ -56,4 +121,4 @@
 
 <avam-new-edit-role>
 
-</avam-new-edit-role>
+</avam-new-edit-role> -->
