@@ -1,4 +1,11 @@
-<h1>Edit ROle</h1>
+<form class="d-flex flex-column" novalidate [formGroup]="roleFormGroup">
+  <div class="text-right mt-3">
+    <div class="btn-group" role="group">
+      <button class="btn btn-sm btn-outline-danger" (click)="roleSavedOrClosed.next()"> Cancel</button>
+      <button class="btn btn-sm btn-outline-primary" (click)="saveRole($event)">Save</button>
+    </div>
+  </div>
+</form>
 <!-- <form novalidate class="d-flex flex-column">
   <div class="d-flex">
     <div class="d-flex flex-fill">

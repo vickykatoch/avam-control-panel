@@ -1,0 +1,4 @@
+<avam-role-list (editRole)="onNewOrEditRole($event)" (newRole)="onNewOrEditRole()" *ngIf="!isSingleRoleShown"></avam-role-list>
+<avam-new-edit-role *ngIf="isSingleRoleShown" (roleSavedOrClosed)="onRoleSavedOrClosed()" [roleId]="roleId">
+
+</avam-new-edit-role>

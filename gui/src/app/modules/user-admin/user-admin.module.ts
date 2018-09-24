@@ -14,6 +14,7 @@ import { UserService } from './services';
 import { UserHostComponent } from './components/user-host/user-host.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { AvamCommonControlsModule } from 'avam-common-controls';
+import { RoleHostComponent } from './components/role-host/role-host.component';
 
 @NgModule({
   imports: [
@@ -32,7 +33,8 @@ import { AvamCommonControlsModule } from 'avam-common-controls';
     EditUserComponent,
     NewEditRoleComponent,
     UserAdminComponent,
-    UserHostComponent
+    UserHostComponent,
+    RoleHostComponent
   ],
   providers : [
     UserService

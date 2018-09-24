@@ -75,4 +75,23 @@ export class EditUserComponent implements OnInit {
         })
     }
   }
+  deleteRole(role: Role) {
+    this.user.roles = this.user.roles.filter(rl => rl != role);
+    if (!this.user.roles.length) {
+      this.user.resources = [];
+    } else {
+      this.resouceService.getResourcesForRoles(this.user.roles)
+        .then(resources => {
+          this.user.resources = [];
+          resources.forEach(res => {
+            if (!this.user.resources.some(r => r.id === res.id)) {
+              this.user.resources.push(res);
+            }
+          });
+        }).catch(error => {
+          console.error(error);
+        });
+    }
+  }
+  
 }

@@ -24,8 +24,13 @@ export class UserListComponent implements OnInit {
   onRefresh() {
     this.fetchUsers();
   }
-  getRoleNames() : string [] {
-    return [];
+  getRoleNames(user: User) : string {
+    if(user.roles && user.roles.length) {
+      return user.roles.reduce((p,c)=> {
+        return p ? `${p}, ${c.name}` : `${c.name}`;
+      },'');
+    }
+    return '';
   }
 
   //#endregion

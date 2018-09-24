@@ -12,6 +12,12 @@ export class RoleService {
   constructor(private http: HttpClient) {
 
   }
+
+  fetchRoles() : Promise<Role[]> {
+    const url=`${this.baseUrl}`;
+    return this.http.get<Role[]>(url).toPromise();
+  }
+
   findByName(name: string) : Observable<Role[]> {
     const url = `${this.baseUrl}?name=${name}`;
     return this.http.get<Role[]>(url);

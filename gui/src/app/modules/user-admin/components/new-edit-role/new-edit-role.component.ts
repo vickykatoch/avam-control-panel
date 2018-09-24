@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, EventEmitter, Input, Output } from '@angular/core';
+import { FormGroup, FormBuilder } from '@angular/forms';
 
 @Component({
   selector: 'avam-new-edit-role',
@@ -7,9 +8,25 @@ import { Component, OnInit } from '@angular/core';
 })
 export class NewEditRoleComponent implements OnInit {
 
-  constructor() { }
+  @Output() roleSavedOrClosed = new EventEmitter();
+  roleID: number;
+  isEdit = false;
+  roleFormGroup: FormGroup;
 
-  ngOnInit() {
+  @Input() set roleId(value: number) {
+    this.isEdit = value ? true : false;
+    this.roleID = value;
   }
 
+  constructor(private fb: FormBuilder) { }
+
+  ngOnInit() {
+    this.roleFormGroup = this.fb.group({
+
+    });
+  }
+
+  saveRole(e: Event) {
+
+  }
 }
