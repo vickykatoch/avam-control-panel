@@ -2,7 +2,7 @@ import { Component, OnInit, EventEmitter, Output, Input } from '@angular/core';
 import { UserService, RoleService, ResourceService } from '../../services';
 import { User, Role } from '../../store/models';
 import { FormGroup, FormBuilder } from '@angular/forms';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 
 @Component({
   selector: 'avam-edit-user',
@@ -35,10 +35,10 @@ export class EditUserComponent implements OnInit {
     });
     if (this.userID) {
       this.userService.fetchUser(this.userID)
-        .then(user => {
+        .subscribe(user => {
           this.user = user;
           this.userFormGroup.patchValue(user);
-        }).catch(console.error);
+        });
     } else {
       this.user = this.userFormGroup.value;
     }
@@ -47,15 +47,16 @@ export class EditUserComponent implements OnInit {
   saveUser(e: Event) {
     const usr = this.userFormGroup.value;
     usr.roles = this.user.roles;
-    this.userService.saveUser(usr)
-      .then(user => {
-        console.info('User saved successfully', user);
-        this.userSavedOrClosed.next();
-        e.preventDefault();
-      }).catch(console.error);
+    // this.userService.saveUser(usr)
+    //   .then(user => {
+    //     console.info('User saved successfully', user);
+    //     this.userSavedOrClosed.next();
+    //     e.preventDefault();
+    //   }).catch(console.error);
   }
   onSearch(filterString: string): Observable<Role[]> {
-    return this.roleService.findByName(filterString);
+    return of([]);
+    // return this.roleService.findByName(filterString);
   }
   onRoleSelected(role: Role) {
     this.user.roles = this.user.roles || [];
@@ -92,5 +93,5 @@ export class EditUserComponent implements OnInit {
         });
     }
   }
-  
+
 }

@@ -21,12 +21,9 @@ export class ResourceListComponent implements OnInit {
   loadResources() {
     this.resources=[];
     this.resxService.fetchAll()
-      .then(resx=> {
+      .subscribe(resx=> {
         this.resources=resx;
         this.isBz= false;
-      }).catch(err=> {
-        console.error(err);
-        this.isBz=false;
       });
   }
 

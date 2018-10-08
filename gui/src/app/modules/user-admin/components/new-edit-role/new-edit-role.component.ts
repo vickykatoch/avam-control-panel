@@ -1,6 +1,6 @@
 import { Component, OnInit, EventEmitter, Input, Output } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { Resource } from '../../store/models';
+import { Resource, Role } from '../../store/models';
 import { Observable, empty } from 'rxjs';
 
 @Component({
@@ -40,11 +40,11 @@ export class NewEditRoleComponent implements OnInit {
   }
   saveRole(e: Event) {
     e.preventDefault();
-    this.roleService.save(this.role).then(r => {
-      this.roleSavedOrClosed.next();
-      console.log(r);
-    }).catch(e => {
-      console.error(e);
-    });
+    // this.roleService.save(this.role).then(r => {
+    //   this.roleSavedOrClosed.next();
+    //   console.log(r);
+    // }).catch(e => {
+    //   console.error(e);
+    // });
   }
 }

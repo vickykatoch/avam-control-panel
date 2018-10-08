@@ -18,7 +18,6 @@ export class RoleListComponent implements OnInit {
   ngOnInit() {
     this.isBz=true;
     this.roleService.fetchRoles().subscribe(roles=> {
-      debugger;
       this.isBz=false;
       this.roles = roles;
     });

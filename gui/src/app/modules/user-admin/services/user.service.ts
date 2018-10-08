@@ -55,10 +55,10 @@ export class UserService {
       query: allUsersQuery
     }).valueChanges.pipe(map(({data})=> data.getAllUsers));
   }
-  saveUser(user: User): Promise<User> {
-    // const url = `${this.baseUrl}/save`;
-    // return this.http.post<User>(url, user).toPromise();
-  }
+  // saveUser(user: User): Promise<User> {
+  //   // const url = `${this.baseUrl}/save`;
+  //   // return this.http.post<User>(url, user).toPromise();
+  // }
   fetchUser(userId: string): Observable<User> {
     return this.apollo.watchQuery<any>({
       query: singleUserQuery
