@@ -6,7 +6,7 @@
     <div class="d-flex flex-fill justify-content-end">
       <div class="btn-group" role="group">
         <button class="btn btn-sm btn-outline-primary" (click)="onRefresh()">Refresh</button>
-        <button class="btn btn-sm btn-outline-primary" (click)="newRole.next()">New Role</button>
+        <button class="btn btn-sm btn-outline-primary" (click)="newRole.next()">New</button>
       </div>
     </div>
   </div>
@@ -36,7 +36,7 @@
           <td></td>
           <td class="text-right">
             <div class="btn-group" role="group">
-              <button class="btn btn-sm btn-outline-primary">Edit</button>
+              <button class="btn btn-sm btn-outline-primary" (click)="editRole.next(role.id)">Edit</button>
               <button class="btn btn-sm btn-outline-primary">Details...</button>
             </div>
           </td>

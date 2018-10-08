@@ -12,6 +12,14 @@ export class RoleService {
   constructor(private http: HttpClient) {
 
   }
+  save(role: Role) : Promise<Role> {
+    const url=`${this.baseUrl}/save`;
+    return this.http.post<Role>(url, role).toPromise();
+  }
+  fetchRole(roleId: number) : Promise<Role> {
+    const url=`${this.baseUrl}/${roleId}`;
+    return this.http.get<Role>(url).toPromise();
+  }
 
   fetchRoles() : Promise<Role[]> {
     const url=`${this.baseUrl}`;

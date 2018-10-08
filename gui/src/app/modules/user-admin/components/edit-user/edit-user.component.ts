@@ -27,7 +27,6 @@ export class EditUserComponent implements OnInit {
   }
 
   ngOnInit() {
-    console.info('User : ' + this.userID);
     this.userFormGroup = this.fb.group({
       userId: '',
       name: '',

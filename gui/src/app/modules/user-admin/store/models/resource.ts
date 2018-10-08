@@ -1,6 +1,7 @@
 export interface Resource {
-  id: number;
+  id?: number;
   name: string;
   type: string;
-  permissions: number;
+  isActive: boolean;
+  permissions?: number;
 }

@@ -12,9 +12,11 @@ import { UserAdminComponent } from './user-admin.component';
 import { HttpClientModule } from '@angular/common/http';
 import { UserService } from './services';
 import { UserHostComponent } from './components/user-host/user-host.component';
-import { ReactiveFormsModule } from '@angular/forms';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { AvamCommonControlsModule } from 'avam-common-controls';
 import { RoleHostComponent } from './components/role-host/role-host.component';
+import { ResourceHostComponent } from './components/resource-host/resource-host.component';
+import { ResourceInfoComponent } from './components/resource-info/resource-info.component';
 
 @NgModule({
   imports: [
@@ -22,6 +24,7 @@ import { RoleHostComponent } from './components/role-host/role-host.component';
     SharedModule,
     AvamTabPanelModule,
     HttpClientModule,
+    FormsModule,
     ReactiveFormsModule,
     AvamCommonControlsModule
   ],
@@ -34,7 +37,9 @@ import { RoleHostComponent } from './components/role-host/role-host.component';
     NewEditRoleComponent,
     UserAdminComponent,
     UserHostComponent,
-    RoleHostComponent
+    RoleHostComponent,
+    ResourceHostComponent,
+    ResourceInfoComponent
   ],
   providers : [
     UserService

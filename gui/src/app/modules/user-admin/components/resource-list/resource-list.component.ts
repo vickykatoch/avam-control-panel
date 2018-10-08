@@ -1,4 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
+import { ResourceService } from '../../services';
+import { Resource } from '../../store/models';
 
 @Component({
   selector: 'avam-resource-list',
@@ -7,9 +9,25 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ResourceListComponent implements OnInit {
 
-  constructor() { }
+  @Output() selected = new EventEmitter<number|undefined>();
+  resources : Resource[] =[];
+  isBz = true;
+
+  constructor(private resxService: ResourceService) { }
 
   ngOnInit() {
+    this.loadResources();
+  }
+  loadResources() {
+    this.resources=[];
+    this.resxService.fetchAll()
+      .then(resx=> {
+        this.resources=resx;
+        this.isBz= false;
+      }).catch(err=> {
+        console.error(err);
+        this.isBz=false;
+      });
   }
 
 }
