@@ -3,28 +3,69 @@ import { PageInfo, User } from '../store/models';
 import { HttpClient } from '@angular/common/http';
 import { ResourceService } from './resource.service';
 import { map } from 'rxjs/operators';
+import { Apollo } from 'apollo-angular';
+import gql from 'graphql-tag';
+import { Observable } from 'rxjs';
+
+const allUsersQuery = gql`
+  query allUsers {
+    getAllUsers {
+      userId
+      firstName
+      lastName
+      isActive
+      createdAt
+      updatedAt
+      roles {
+        id,
+        name,
+        isActive
+      }
+    }
+  }
+`;
+const singleUserQuery = gql`
+  query singleUser {
+    getUser {
+      userId
+      firstName
+      lastName
+      isActive
+      createdAt
+      updatedAt
+      roles {
+        id,
+        name,
+        isActive
+      }
+    }
+  }
+`;
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
-  private baseUrl = 'http://localhost:5000/api/admin/users';
-  constructor(private http: HttpClient, private resourceService: ResourceService) {
+   constructor(private apollo: Apollo) {
 
   }
 
-  fetchAll(pageInfo?: PageInfo): Promise<User[]> {
-    const url = this.baseUrl;
-    return this.http.get<User[]>(url).toPromise();
+  fetchAll(pageInfo?: PageInfo): Observable<User[]> {
+    return this.apollo.watchQuery<any>({
+      query: allUsersQuery
+    }).valueChanges.pipe(map(({data})=> data.getAllUsers));
   }
   saveUser(user: User): Promise<User> {
-    const url = `${this.baseUrl}/save`;
-    return this.http.post<User>(url, user).toPromise();
+    // const url = `${this.baseUrl}/save`;
+    // return this.http.post<User>(url, user).toPromise();
   }
-  fetchUser(userId: string): Promise<User> {
-    const url = `${this.baseUrl}/${userId}`;
-    return this.http.get<User>(url).pipe(
-      map(this.transformUser)).toPromise();
+  fetchUser(userId: string): Observable<User> {
+    return this.apollo.watchQuery<any>({
+      query: singleUserQuery
+    }).valueChanges.pipe(map(({data})=> {
+      debugger;
+      return data.getUser;
+    }));
   }
 
   //#region Helper Methods

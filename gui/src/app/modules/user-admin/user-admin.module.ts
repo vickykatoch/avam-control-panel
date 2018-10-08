@@ -16,10 +16,17 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { AvamCommonControlsModule } from 'avam-common-controls';
 import { RoleHostComponent } from './components/role-host/role-host.component';
 
+import { ApolloModule, APOLLO_OPTIONS } from "apollo-angular";
+import { HttpLinkModule, HttpLink } from "apollo-angular-link-http";
+import { InMemoryCache } from "apollo-cache-inmemory";
+
+
 @NgModule({
   imports: [
     CommonModule,
     SharedModule,
+    ApolloModule,
+    HttpLinkModule,
     AvamTabPanelModule,
     HttpClientModule,
     ReactiveFormsModule,
@@ -37,7 +44,19 @@ import { RoleHostComponent } from './components/role-host/role-host.component';
     RoleHostComponent
   ],
   providers : [
-    UserService
+    UserService,
+    {
+      provide: APOLLO_OPTIONS,
+      useFactory(httpLink: HttpLink) {
+        return {
+          cache: new InMemoryCache(),
+          link: httpLink.create({
+            uri: "http://localhost:4000"
+          })
+        }
+      },
+      deps: [HttpLink]
+    }
   ],
   exports :[
     SignInComponent,
