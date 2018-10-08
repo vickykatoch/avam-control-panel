@@ -1,73 +1,50 @@
-<form class="d-flex flex-column"  [formGroup]="roleFormGroup">
-
+<form class="d-flex flex-column" novalidate [formGroup]="roleFormGroup">
   <div class="d-flex">
-    <div class="flex-fill d-flex flex-column">
+    <div class="d-flex flex-fill flex-column pr-3">
       <label for="name">Name</label>
       <input type="text" class="form-control form-control-sm" formControlName="name" id="name">
     </div>
-    <div class="d-flex align-items-end flex-fill ml-3">
-      <div class="form-check">
-        <input type="checkbox" class="form-check-input" id="isActive" formControlName="isActive">
+    <div class="d-flex align-items-end flex-fill pl-3">
+      <div class="form-check flex-fill">
+        <input type="checkbox" class="form-check-input" id="isActive">
         <label class="form-check-label" for="isActive">Is Active</label>
       </div>
-    </div>
-    <div class="d-flex align-items-end flex-fill">
-      <div class="form-check">
-        <input type="checkbox" class="form-check-input" id="isAdmin" formControlName="isAdmin">
-        <label class="form-check-label" for="isAdmin">Is Admin</label>
+      <div class="form-check flex-fill">
+        <input type="checkbox" class="form-check-input" id="isAdmin">
+        <label class="form-check-label" for="isAdmin">Is Active</label>
       </div>
-    </div>
-  </div>
-
-  <div class="d-flex flex-column mt-3">
-    <div class="d-flex text-white bg-dark p-1">
-      <h5 class="flex-fill">Resources & Permissions</h5>
-      <div class="d-flex flex-fill justify-content-end">
-        <avam-dd-suggest [searchAndFilter]="onSearch.bind(this)" (itemSelected)="onResourceSelected($event)">
-
-        </avam-dd-suggest>
-        <!-- <avam-dd-suggest (itemSelected)="onResourceSelected($event)" [searchAndFilter]="onSearch.bind(this)"></avam-dd-suggest> -->
-      </div>
-    </div>
-
-
-    <table class="table table-sm table-bordered table-hover">
-      <thead>
-        <tr class="text-center">
-          <th rowspan="2">Name</th>
-          <th rowspan="2">Is Active</th>
-          <th colspan="4">Permissions</th>
-          <th rowspan="2"></th>
-        </tr>
-        <tr>
-          <th >Create</th>
-          <th >Edit</th>
-          <th >View</th>
-          <th >Delete</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let resource of role?.resources">
-          <td>{{resource.name}}</td>
-          <td class="text-center">{{resource.isActive}}</td>
-          <td class="text-center">True</td>
-          <td class="text-center">True</td>
-          <td class="text-center">True</td>
-          <td class="text-center">True</td>
-          <td class="text-right">
-            <button class="btn btn-sm btn-outline-danger" (click)="deleteResource(resource)">Delete</button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-
-
-  </div>
-
-  <div class="text-right mt-3">
-    <div class="btn-group" role="group">
-      <button class="btn btn-sm btn-outline-danger" (click)="roleSavedOrClosed.next()"> Cancel</button>
-      <button class="btn btn-sm btn-outline-primary" (click)="saveRole($event)">Save</button>
     </div>
   </div>
 </form>
+
+
+<div class="d-flex flex-fill flex-column mt-3">
+  <div class="d-flex text-white bg-dark p-1">
+    <h5 class="flex-fill">Resources & Permissions</h5>
+    <div class="flex-fill">
+      <avam-dd-suggest (itemSelected)="onResourceSelected($event)" [searchAndFilter]="onSearch.bind(this)"></avam-dd-suggest>
+    </div>
+
+  </div>
+  <table class="table table-sm table-bordered table-hover">
+    <thead>
+      <tr class="text-center">
+        <th>Name</th>
+        <th>Is Active</th>
+        <th>Is Admin</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+
+    </tbody>
+  </table>
+</div>
+
+
+<div class="text-right mt-5">
+  <div class="btn-group" role="group">
+    <button class="btn btn-sm btn-outline-danger" (click)="roleSavedOrClosed.next()"> Cancel</button>
+    <button class="btn btn-sm btn-outline-primary" (click)="saveRole($event)">Save</button>
+  </div>
+</div>

@@ -17,16 +17,14 @@ export class RoleListComponent implements OnInit {
 
   ngOnInit() {
     this.isBz=true;
-    this.roleService.fetchRoles()
-      .then(roles => {
-        this.roles = roles;
-        this.isBz=false;
-      })
-      .catch(console.error);
-    // this.roles = this.buildGridData();
+    this.roleService.fetchRoles().subscribe(roles=> {
+      debugger;
+      this.isBz=false;
+      this.roles = roles;
+    });
   }
 
   // #region Temp Code
- 
+
   //#endregion
 }

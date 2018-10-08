@@ -1,7 +1,6 @@
 import { Component, OnInit, EventEmitter, Input, Output } from '@angular/core';
-import { FormGroup, FormBuilder } from '@angular/forms';
-import { RoleService, ResourceService } from '../../services';
-import { Role, Resource } from '../../store/models';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { Resource } from '../../store/models';
 import { Observable, empty } from 'rxjs';
 
 @Component({
@@ -22,45 +21,22 @@ export class NewEditRoleComponent implements OnInit {
     this.roleID = value;
   }
 
-  constructor(private fb: FormBuilder, private roleService: RoleService,
-    private resourceService: ResourceService) {
-    this.role = {
-      id: undefined,
-      name: '',
-      isActive: true,
-      isAdmin: false,
-      resources: []
-    };
+  constructor(private fb: FormBuilder) {
+    this.roleFormGroup = this.fb.group({
+      name: ['', Validators.required],
+      isAdmin : false,
+      isActive: true
+    });
   }
 
   ngOnInit() {
-    this.roleFormGroup = this.fb.group({
-      name: '',
-      isAdmin: false,
-      isActive: true
-    });
-    if (this.roleID) {
-      this.roleService.fetchRole(this.roleID)
-        .then(role => {
-          this.role = Object.assign({}, role);
-          this.role.resources = role.resources || [];
-          this.roleFormGroup.patchValue(role);
-        }).catch(console.error);
-    } else {
-      this.roleFormGroup.patchValue(this.role);
-    }
+
   }
   onResourceSelected(resource: Resource) {
-    if (!this.role.resources.some(x => x.id === resource.id)) {
-      this.role.resources.push(resource);
-    }
-  }
 
-  deleteResource(resource: Resource) {
-    this.role.resources = this.role.resources.filter(res => res !== resource);
   }
-  onSearch(query: string): Observable<Resource[]> {
-    return this.resourceService.queryByName(query);
+  onSearch(query: string) : Observable<Resource[]> {
+    return empty();
   }
   saveRole(e: Event) {
     e.preventDefault();

@@ -18,10 +18,17 @@ import { RoleHostComponent } from './components/role-host/role-host.component';
 import { ResourceHostComponent } from './components/resource-host/resource-host.component';
 import { ResourceInfoComponent } from './components/resource-info/resource-info.component';
 
+import { ApolloModule, APOLLO_OPTIONS } from "apollo-angular";
+import { HttpLinkModule, HttpLink } from "apollo-angular-link-http";
+import { InMemoryCache } from "apollo-cache-inmemory";
+
+
 @NgModule({
   imports: [
     CommonModule,
     SharedModule,
+    ApolloModule,
+    HttpLinkModule,
     AvamTabPanelModule,
     HttpClientModule,
     FormsModule,
@@ -42,7 +49,19 @@ import { ResourceInfoComponent } from './components/resource-info/resource-info.
     ResourceInfoComponent
   ],
   providers : [
-    UserService
+    UserService,
+    {
+      provide: APOLLO_OPTIONS,
+      useFactory(httpLink: HttpLink) {
+        return {
+          cache: new InMemoryCache(),
+          link: httpLink.create({
+            uri: "http://localhost:4000"
+          })
+        }
+      },
+      deps: [HttpLink]
+    }
   ],
   exports :[
     SignInComponent,
