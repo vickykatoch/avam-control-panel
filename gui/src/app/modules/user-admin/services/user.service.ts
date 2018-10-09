@@ -8,8 +8,8 @@ import gql from 'graphql-tag';
 import { Observable } from 'rxjs';
 
 const allUsersQuery = gql`
-  query allUsers {
-    getAllUsers {
+  query allUsers($filter: UserFilterInput) {
+    users(filter: $filter) {
       userId
       firstName
       lastName
@@ -17,16 +17,22 @@ const allUsersQuery = gql`
       createdAt
       updatedAt
       roles {
-        id,
-        name,
+        id
+        name
+        isAdmin
         isActive
+        resources {
+          id
+          name
+          type
+        }
       }
     }
   }
 `;
 const singleUserQuery = gql`
-  query singleUser {
-    getUser {
+  query singleUser($userId: String!) {
+    user(userId: $userId) {
       userId
       firstName
       lastName
@@ -34,9 +40,15 @@ const singleUserQuery = gql`
       createdAt
       updatedAt
       roles {
-        id,
-        name,
+        id
+        name
+        isAdmin
         isActive
+        resources {
+          id
+          name
+          type
+        }
       }
     }
   }
@@ -46,26 +58,36 @@ const singleUserQuery = gql`
   providedIn: 'root'
 })
 export class UserService {
-   constructor(private apollo: Apollo) {
-
+  constructor(private apollo: Apollo) {
   }
-
-  fetchAll(pageInfo?: PageInfo): Observable<User[]> {
-    return this.apollo.watchQuery<any>({
+  fetch(): Promise<User[]> {
+    const client = this.apollo.getClient();
+    return client.query<any, any>({
+      query: allUsersQuery,
+      variables: {
+        filter: {
+          isActive: true
+        }
+      }
+    }).then(result => result.data.users);
+  }
+  fetchAll(pageInfo?: PageInfo): Promise<User[]> {
+    const client = this.apollo.getClient();
+    return client.query<any, any>({
       query: allUsersQuery
-    }).valueChanges.pipe(map(({data})=> data.getAllUsers));
+    }).then(result => result.data.users);
   }
   // saveUser(user: User): Promise<User> {
   //   // const url = `${this.baseUrl}/save`;
   //   // return this.http.post<User>(url, user).toPromise();
   // }
-  fetchUser(userId: string): Observable<User> {
-    return this.apollo.watchQuery<any>({
-      query: singleUserQuery
-    }).valueChanges.pipe(map(({data})=> {
-      debugger;
-      return data.getUser;
-    }));
+  fetchUser(userId: string): Promise<User> {
+    return this.apollo.getClient().query<any, any>({
+      query: singleUserQuery,
+      variables: {
+        userId
+      }
+    }).then(result => result.data.user);
   }
 
   //#region Helper Methods

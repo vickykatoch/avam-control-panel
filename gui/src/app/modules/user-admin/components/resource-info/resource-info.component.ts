@@ -16,9 +16,9 @@ export class ResourceInfoComponent implements OnInit {
   resource : Resource;
 
 
-  constructor(private fb: FormBuilder, private resxService: ResourceService) { 
+  constructor(private fb: FormBuilder, private resxService: ResourceService) {
     this.resource = {
-      name : '', 
+      name : '',
       type : '',
       isActive: true
     };
@@ -31,20 +31,20 @@ export class ResourceInfoComponent implements OnInit {
       isActive: true
     });
     if (this.resourceId) {
-      this.resxService.findById(this.resourceId)
-        .then(resx=> {
-          this.resource = resx;
-          this.resxFormGroup.patchValue(this.resource);
-        }).catch(console.error);
+      // this.resxService.findById(this.resourceId)
+      //   .then(resx=> {
+      //     this.resource = resx;
+      //     this.resxFormGroup.patchValue(this.resource);
+      //   }).catch(console.error);
     } else {
       this.resxFormGroup.patchValue(this.resource);
     }
   }
   save(e: Event) {
     this.resource = Object.assign({}, this.resource, this.resxFormGroup.value);
-    this.resxService.save(this.resource).then(x => {
-      this.closed.next();
-    }).catch(console.error);
+    // this.resxService.save(this.resource).then(x => {
+    //   this.closed.next();
+    // }).catch(console.error);
     e.preventDefault();
   }
 

@@ -1,8 +1,9 @@
 import { Component, OnInit, EventEmitter, Output, Input } from '@angular/core';
 import { UserService, RoleService, ResourceService } from '../../services';
-import { User, Role } from '../../store/models';
+import { User, Role, Resource } from '../../store/models';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { Observable, of } from 'rxjs';
+import { TreeNode } from 'primeng/api';
 
 @Component({
   selector: 'avam-edit-user',
@@ -15,6 +16,8 @@ export class EditUserComponent implements OnInit {
   isEdit = false;
   user: User;
   userFormGroup: FormGroup;
+  userResources: Resource[] = [];
+  nodes: TreeNode[] = [];
 
   constructor(private userService: UserService, private fb: FormBuilder,
     private resouceService: ResourceService, private roleService: RoleService) {
@@ -29,14 +32,16 @@ export class EditUserComponent implements OnInit {
   ngOnInit() {
     this.userFormGroup = this.fb.group({
       userId: '',
-      name: '',
-      isActive: false,
-      password: ''
+      firstName: '',
+      lastName: '',
+      isActive: false
     });
     if (this.userID) {
       this.userService.fetchUser(this.userID)
-        .subscribe(user => {
+        .then(user => {
           this.user = user;
+          this.resolveTree(user);
+          this.userResources = this.resolveUserResource(user);
           this.userFormGroup.patchValue(user);
         });
     } else {
@@ -62,17 +67,17 @@ export class EditUserComponent implements OnInit {
     this.user.roles = this.user.roles || [];
     if (!this.user.roles.some(x => x.name === role.name)) {
       this.user.roles.push(role);
-      this.resouceService.getResourcesForRoles([role])
-        .then(resources => {
-          this.user.resources = this.user.resources || [];
-          resources.forEach(res => {
-            if (!this.user.resources.some(r => r.id === res.id)) {
-              this.user.resources.push(res);
-            }
-          });
-        }).catch(error => {
-          console.error(error);
-        })
+      // this.resouceService.getResourcesForRoles([role])
+      //   .then(resources => {
+      //     this.user.resources = this.user.resources || [];
+      //     resources.forEach(res => {
+      //       if (!this.user.resources.some(r => r.id === res.id)) {
+      //         this.user.resources.push(res);
+      //       }
+      //     });
+      //   }).catch(error => {
+      //     console.error(error);
+      //   })
     }
   }
   deleteRole(role: Role) {
@@ -80,18 +85,37 @@ export class EditUserComponent implements OnInit {
     if (!this.user.roles.length) {
       this.user.resources = [];
     } else {
-      this.resouceService.getResourcesForRoles(this.user.roles)
-        .then(resources => {
-          this.user.resources = [];
-          resources.forEach(res => {
-            if (!this.user.resources.some(r => r.id === res.id)) {
-              this.user.resources.push(res);
-            }
-          });
-        }).catch(error => {
-          console.error(error);
-        });
+      // this.resouceService.getResourcesForRoles(this.user.roles)
+      //   .then(resources => {
+      //     this.user.resources = [];
+      //     resources.forEach(res => {
+      //       if (!this.user.resources.some(r => r.id === res.id)) {
+      //         this.user.resources.push(res);
+      //       }
+      //     });
+      //   }).catch(error => {
+      //     console.error(error);
+      //   });
     }
   }
-
+  private resolveTree(user: User) {
+    debugger;
+    const nodes = user.roles.map(role => {
+      const node = {
+        data: role,
+        children: role.resources.map(res => ({ data: res }))
+      };
+      return node;
+    });
+    this.nodes = nodes;
+  }
+  resolveUserResource(user: User): Resource[] {
+    const resx = {};
+    user.roles.forEach(role => {
+      role.resources.forEach(res => {
+        resx[res.id] = res;
+      });
+    });
+    return Object.values(resx);
+  }
 }

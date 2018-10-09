@@ -1,4 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import { RouterModule } from '@angular/router';
 import { NgModule } from '@angular/core';
 import { UserAdminModule } from './modules/user-admin'
@@ -20,6 +21,7 @@ import { UserConfigModule } from './modules/user-config';
   ],
   imports: [
     BrowserModule,
+    BrowserAnimationsModule,
     RouterModule.forRoot(routeConfig),
     UserAdminModule,
     AvamTabPanelModule,

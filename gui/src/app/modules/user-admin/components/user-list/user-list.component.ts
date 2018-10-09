@@ -1,6 +1,7 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { User } from '../../store/models/user';
 import { UserService } from '../../services';
+import { UserGQLQueryService } from '../../services/user-gqlquery.service';
 
 @Component({
   selector: 'avam-user-list',
@@ -13,7 +14,7 @@ export class UserListComponent implements OnInit {
   @Output() editUser = new EventEmitter<string>();
   @Output() newUser = new EventEmitter();
 
-  constructor(private userService: UserService) {
+  constructor(private userService: UserService, private userSVC: UserGQLQueryService) {
   }
 
   ngOnInit() {
@@ -38,7 +39,7 @@ export class UserListComponent implements OnInit {
   // #region Helper Methods
   private fetchUsers() {
     this.isBz = true;
-    this.userService.fetchAll().subscribe(users => {
+    this.userService.fetchAll().then(users => {
       this.users = users;
       this.isBz = false;
     });

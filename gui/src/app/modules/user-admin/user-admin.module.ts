@@ -17,10 +17,12 @@ import { AvamCommonControlsModule } from 'avam-common-controls';
 import { RoleHostComponent } from './components/role-host/role-host.component';
 import { ResourceHostComponent } from './components/resource-host/resource-host.component';
 import { ResourceInfoComponent } from './components/resource-info/resource-info.component';
+import {TreeTableModule} from 'primeng/treetable';
 
 import { ApolloModule, APOLLO_OPTIONS } from "apollo-angular";
 import { HttpLinkModule, HttpLink } from "apollo-angular-link-http";
 import { InMemoryCache } from "apollo-cache-inmemory";
+import { UserGQLQueryService } from './services/user-gqlquery.service';
 
 
 @NgModule({
@@ -33,7 +35,8 @@ import { InMemoryCache } from "apollo-cache-inmemory";
     HttpClientModule,
     FormsModule,
     ReactiveFormsModule,
-    AvamCommonControlsModule
+    AvamCommonControlsModule,
+    TreeTableModule
   ],
   declarations: [
     SignInComponent,
@@ -50,6 +53,7 @@ import { InMemoryCache } from "apollo-cache-inmemory";
   ],
   providers : [
     UserService,
+    UserGQLQueryService,
     {
       provide: APOLLO_OPTIONS,
       useFactory(httpLink: HttpLink) {
