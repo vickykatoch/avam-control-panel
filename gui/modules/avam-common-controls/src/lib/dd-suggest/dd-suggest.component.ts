@@ -36,7 +36,7 @@ export class DropDownSuggestComponent implements OnInit, OnDestroy {
     //#endregion
 
     //#region CTOR
-    constructor(private renderer : Renderer2) {
+    constructor(private renderer: Renderer2) {
     }
     //#endregion
 
@@ -71,7 +71,7 @@ export class DropDownSuggestComponent implements OnInit, OnDestroy {
     }
     onItemSelected(item: any) {
         this.clear();
-        this.renderer.setProperty(this.searchInput.nativeElement,'value','');
+        this.renderer.setProperty(this.searchInput.nativeElement, 'value', '');
         this.itemSelected.next(item);
     }
     //#endregion
@@ -94,6 +94,16 @@ export class DropDownSuggestComponent implements OnInit, OnDestroy {
             })).subscribe((keyEvt: KeyboardEvent) => {
                 this.nonCharKeyEventNotifier$.next(keyEvt);
             }));
+        this.subscriptions.push(fromEvent<FocusEvent>(this.searchInput.nativeElement, 'focus').pipe(
+            filter(evt => evt.target['value'])
+        ).subscribe(e => {
+            this.isSearching = true;
+            this.search(e.target['value']).subscribe(result => {
+                this.searchResult = result && Array.isArray(result) && result.length ? result : [];
+                !this.searchResult.length && this.clear();
+                this.isSearching = false;
+            });
+        }));
         this.subscriptions.push(this.listenCharKeyEvents());
         this.subscriptions.push(this.listenNavigationKeyEvents());
         this.subscriptions.push(this.listenNonCharKeyEvents());
@@ -119,13 +129,13 @@ export class DropDownSuggestComponent implements OnInit, OnDestroy {
                 return true;
             }),
             switchMap((query: string) => {
-                this.isSearching=true;
+                this.isSearching = true;
                 return this.search(query);
             })
         ).subscribe(result => {
             this.searchResult = result && Array.isArray(result) && result.length ? result : [];
             !this.searchResult.length && this.clear();
-            this.isSearching=false;
+            this.isSearching = false;
         });
     }
     private listenNonCharKeyEvents() {

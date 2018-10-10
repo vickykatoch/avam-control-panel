@@ -49,7 +49,7 @@ const fetchAll = (req, res) => {
 
 
     promise.then(roles => {
-            res.status(200).json(roles);
+        res.status(200).json(roles);
     }).catch(error => {
         res.json({
             error: error.message,
@@ -110,6 +110,62 @@ const removeEntity = (req, res) => {
         status: 'Method not yet implemented'
     });
 }
+const findRoleById = (id) => {
+    return new Promise((resolve, reject) => {
+        DB.Role.findById(id, {
+                include: [userIncludes, resourceInclude]
+            })
+            .then(role => {
+                resolve(role);
+            }).catch(error => reject(error));
+    });
+};
+const update = (role) => {
+    return new Promise((resolve, reject) => {
+        DB.Role.update(role, {
+            where: {
+                id: role.id
+            }
+        }).then(result => {
+            if (Array.isArray(result) && result.length === 1) {
+                findRoleById(role.id).then(savedRole => {
+                    const resources = role.resources.map(res => res.id);
+                    savedRole.setResources(resources).then(res => {
+                        if (Array.isArray(res) && result.length > 0) {
+                            resolve(savedRole);
+                        } else {
+                            reject({
+                                error: 'Role could not be updated'
+                            });
+                        }
+                    }).catch(reject);
+                })
+            } else {
+                reject({
+                    error: 'Role could not be updated'
+                });
+            }
+        }).catch(reject);
+    });
+
+}
+const upsertEntity = (req, res) => {
+    const role = req.body;
+    if (role) {
+        if (role.id) {
+            update(role).then(role => {
+                res.status(200).json(role);
+            }).catch(err => {
+                res.status(400).json({
+                    error: err.message,
+                    stack: err.stack
+                });
+            });
+        } else {
+
+        }
+    }
+}
 //#endregion
 
 //#region EXPORTS
@@ -119,6 +175,7 @@ module.exports = {
     findbyName,
     addEntity,
     updateEntity,
-    removeEntity
+    removeEntity,
+    upsertEntity
 };
 //#endregion

@@ -1,0 +1,4 @@
+<avam-resource-list (selected)="resourceId=$event;isSingle=true"  *ngIf="!isSingle"></avam-resource-list>
+<avam-resource-info *ngIf="isSingle" [resourceId]="resourceId" (closed)="resourceId=undefined;isSingle=false">
+
+</avam-resource-info>

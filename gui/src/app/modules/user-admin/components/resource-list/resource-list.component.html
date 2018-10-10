@@ -1,3 +1,70 @@
-<p>
-  resource-list works!
-</p>
+<div class="d-flex flex-column flex-fill">
+  <div class="d-flex">
+    <div class="d-flex flex-fill">
+      <h5>Resource List :</h5>
+    </div>
+    <div class="d-flex flex-fill justify-content-end">
+      <div class="btn-group" role="group">
+        <button class="btn btn-sm btn-outline-primary" (click)="loadResources()">Refresh</button>
+        <button class="btn btn-sm btn-outline-primary" (click)="selected.next()">New</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="d-flex mt-2">
+    <table class="table table-sm table-bordered table-hover">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Is Active</th>
+          <th>Created On</th>
+          <th>Last Update</th>
+          <th></th>
+        </tr>
+
+      </thead>
+      <tbody>
+        <tr *ngIf="isBz">
+          <td colspan="6">
+            <span>
+              <i class="fa fa-spinner fa-spin fa-2x" aria-hidden="true"></i>
+              <strong class="ml-2">Loading, please wait...</strong>
+            </span>
+          </td>
+        </tr>
+        <tr *ngFor="let resource of resources">
+          <td>{{resource.name}}</td>
+          <td>{{resource.type}}</td>
+          <td>{{resource.isActive}}</td>
+          <td>{{resource.createdAt | dateFormat}}</td>
+          <td>{{resource.updatedAt | dateFormat}}</td>
+
+          <td class="text-right">
+            <div class="btn-group" role="group">
+              <button class="btn btn-sm btn-outline-primary" (click)="selected.next(resource.id)">Edit</button>
+              <button class="btn btn-sm btn-outline-primary">Details...</button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="d-flex justify-content-end" *ngIf="!isBz">
+    <div class="btn-group" role="group">
+      <button class="btn btn-sm btn-outline-primary">
+        <i class="fa fa-step-backward" aria-hidden="true"></i>
+      </button>
+      <button class="btn btn-sm btn-outline-primary">
+        <i class="fa fa-caret-left" aria-hidden="true"></i>
+      </button>
+      <button class="btn btn-sm btn-outline-primary">
+        <i class="fa fa-caret-right" aria-hidden="true"></i>
+      </button>
+      <button class="btn btn-sm btn-outline-primary">
+        <i class="fa fa-step-forward" aria-hidden="true"></i>
+      </button>
+    </div>
+  </div>
+</div>

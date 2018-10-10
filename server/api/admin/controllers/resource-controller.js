@@ -13,7 +13,9 @@ const roleIncludes = {
 //#region CRUD OPERATIONS
 const fetchById = (req, res) => {
     const id = req.params.id;
-    DB.Resource.findById(id, { include: [roleIncludes] })
+    DB.Resource.findById(id, {
+            include: [roleIncludes]
+        })
         .then(resource => {
             res.json(resource);
         }).catch(error => {
@@ -24,7 +26,9 @@ const fetchById = (req, res) => {
         });
 };
 const fetchAll = (req, res) => {
-    DB.Resource.findAll({ include: [roleIncludes] })
+    DB.Resource.findAll({
+            include: [roleIncludes]
+        })
         .then(resources => {
             res.json(resources);
         }).catch(error => {
@@ -51,7 +55,9 @@ const updateEntity = (req, res) => {
             id: resourceId
         }
     }).then(updates => {
-        res.status(200).json({ recordsUpdated: updates.length });
+        res.status(200).json({
+            recordsUpdated: updates.length
+        });
     }).catch(err => {
         res.status(400).json({
             error: err.message,
@@ -65,16 +71,16 @@ const removeEntity = (req, res) => {
         status: 'Method not yet implemented'
     });
 }
-const fetchByRoles = (req,res) => {
+const fetchByRoles = (req, res) => {
     const roles = req.body;
     DB.Resource.findAll({
-        include : [{
-            model : DB.Role,
-            as : 'roles',
-            attributes:[],
-            where : {
-                id : {
-                    [DB.sequelize.Op.in] :  roles
+        include: [{
+            model: DB.Role,
+            as: 'roles',
+            attributes: [],
+            where: {
+                id: {
+                    [DB.sequelize.Op.in]: roles
                 }
             }
         }]
@@ -87,7 +93,24 @@ const fetchByRoles = (req,res) => {
         });
     });
 }
-
+const query = (req, res) => {
+    const name = req.query['name'];
+    DB.Resource.findAll({
+            where: {
+                name: {
+                    [DB.Sequelize.Op.like]: `${name}%`
+                }
+            }
+        })
+        .then(resources => {
+            res.json(resources);
+        }).catch(error => {
+            res.status(400).json({
+                error: error.message,
+                stack: error.stack
+            });
+        });
+};
 //#endregion
 
 //#region EXPORTS
@@ -97,6 +120,7 @@ module.exports = {
     addEntity,
     updateEntity,
     removeEntity,
-    fetchByRoles
+    fetchByRoles,
+    query
 };
 //#endregion

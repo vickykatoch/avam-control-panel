@@ -6,7 +6,7 @@
     <div class="d-flex flex-fill justify-content-end">
       <div class="btn-group" role="group">
         <button class="btn btn-sm btn-outline-primary" (click)="onRefresh()">Refresh</button>
-        <button class="btn btn-sm btn-outline-primary" (click)="newUser.next()">New User</button>
+        <button class="btn btn-sm btn-outline-primary" (click)="newUser.next()">New</button>
       </div>
     </div>
   </div>
@@ -15,7 +15,8 @@
       <thead>
         <tr>
           <th>User ID</th>
-          <th>Name</th>
+          <th>First Name</th>
+          <th>Last Name</th>
           <th>Is Active</th>
           <th>Created On</th>
           <th>Last Update</th>
@@ -34,7 +35,8 @@
       <tbody>
         <tr *ngFor="let user of users">
           <td>{{user.userId}}</td>
-          <td>{{user.name}}</td>
+          <td>{{user.firstName}}</td>
+          <td>{{user.lastName}}</td>
           <td>{{user.isActive}}</td>
           <td>{{user.createdAt | dateFormat}}</td>
           <td>{{user.updatedAt | dateFormat}}</td>

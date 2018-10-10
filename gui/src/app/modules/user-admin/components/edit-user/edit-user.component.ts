@@ -1,8 +1,9 @@
 import { Component, OnInit, EventEmitter, Output, Input } from '@angular/core';
 import { UserService, RoleService, ResourceService } from '../../services';
-import { User, Role } from '../../store/models';
+import { User, Role, Resource } from '../../store/models';
 import { FormGroup, FormBuilder } from '@angular/forms';
-import { Observable } from 'rxjs';
+import { Observable, from } from 'rxjs';
+import { TreeNode } from 'primeng/api';
 
 @Component({
   selector: 'avam-edit-user',
@@ -15,6 +16,8 @@ export class EditUserComponent implements OnInit {
   isEdit = false;
   user: User;
   userFormGroup: FormGroup;
+  userResources: Resource[] = [];
+  nodes: TreeNode[] = [];
 
   constructor(private userService: UserService, private fb: FormBuilder,
     private resouceService: ResourceService, private roleService: RoleService) {
@@ -27,19 +30,20 @@ export class EditUserComponent implements OnInit {
   }
 
   ngOnInit() {
-    console.info('User : ' + this.userID);
     this.userFormGroup = this.fb.group({
       userId: '',
-      name: '',
-      isActive: false,
-      password: ''
+      firstName: '',
+      lastName: '',
+      isActive: false
     });
     if (this.userID) {
       this.userService.fetchUser(this.userID)
         .then(user => {
           this.user = user;
+          this.resolveTree(user);
+          this.userResources = this.resolveUserResource(user);
           this.userFormGroup.patchValue(user);
-        }).catch(console.error);
+        });
     } else {
       this.user = this.userFormGroup.value;
     }
@@ -47,7 +51,7 @@ export class EditUserComponent implements OnInit {
 
   saveUser(e: Event) {
     const usr = this.userFormGroup.value;
-    usr.roles = this.user.roles;
+    usr.roles = this.user.roles.map(x=> x.id);
     this.userService.saveUser(usr)
       .then(user => {
         console.info('User saved successfully', user);
@@ -56,23 +60,13 @@ export class EditUserComponent implements OnInit {
       }).catch(console.error);
   }
   onSearch(filterString: string): Observable<Role[]> {
-    return this.roleService.findByName(filterString);
+    return from(this.roleService.fetchRoles(filterString));
   }
   onRoleSelected(role: Role) {
     this.user.roles = this.user.roles || [];
     if (!this.user.roles.some(x => x.name === role.name)) {
       this.user.roles.push(role);
-      this.resouceService.getResourcesForRoles([role])
-        .then(resources => {
-          this.user.resources = this.user.resources || [];
-          resources.forEach(res => {
-            if (!this.user.resources.some(r => r.id === res.id)) {
-              this.user.resources.push(res);
-            }
-          });
-        }).catch(error => {
-          console.error(error);
-        })
+      this.nodes = [...this.nodes, this.getTreeNode(role)];
     }
   }
   deleteRole(role: Role) {
@@ -80,18 +74,35 @@ export class EditUserComponent implements OnInit {
     if (!this.user.roles.length) {
       this.user.resources = [];
     } else {
-      this.resouceService.getResourcesForRoles(this.user.roles)
-        .then(resources => {
-          this.user.resources = [];
-          resources.forEach(res => {
-            if (!this.user.resources.some(r => r.id === res.id)) {
-              this.user.resources.push(res);
-            }
-          });
-        }).catch(error => {
-          console.error(error);
-        });
+      // this.resouceService.getResourcesForRoles(this.user.roles)
+      //   .then(resources => {
+      //     this.user.resources = [];
+      //     resources.forEach(res => {
+      //       if (!this.user.resources.some(r => r.id === res.id)) {
+      //         this.user.resources.push(res);
+      //       }
+      //     });
+      //   }).catch(error => {
+      //     console.error(error);
+      //   });
     }
   }
-  
+  private resolveTree(user: User) {
+    this.nodes = user.roles.map(this.getTreeNode);
+  }
+  private getTreeNode(role) : TreeNode {
+    return {
+      data : role,
+      children : role.resources ?  role.resources.map(res => ({ data: res })) : []
+    };
+  }
+  resolveUserResource(user: User): Resource[] {
+    const resx = {};
+    user.roles.forEach(role => {
+      role.resources.forEach(res => {
+        resx[res.id] = res;
+      });
+    });
+    return Object.values(resx);
+  }
 }
