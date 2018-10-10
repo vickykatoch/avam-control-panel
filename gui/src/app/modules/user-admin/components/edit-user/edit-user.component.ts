@@ -2,7 +2,7 @@ import { Component, OnInit, EventEmitter, Output, Input } from '@angular/core';
 import { UserService, RoleService, ResourceService } from '../../services';
 import { User, Role, Resource } from '../../store/models';
 import { FormGroup, FormBuilder } from '@angular/forms';
-import { Observable, of } from 'rxjs';
+import { Observable, from } from 'rxjs';
 import { TreeNode } from 'primeng/api';
 
 @Component({
@@ -51,33 +51,22 @@ export class EditUserComponent implements OnInit {
 
   saveUser(e: Event) {
     const usr = this.userFormGroup.value;
-    usr.roles = this.user.roles;
-    // this.userService.saveUser(usr)
-    //   .then(user => {
-    //     console.info('User saved successfully', user);
-    //     this.userSavedOrClosed.next();
-    //     e.preventDefault();
-    //   }).catch(console.error);
+    usr.roles = this.user.roles.map(x=> x.id);
+    this.userService.saveUser(usr)
+      .then(user => {
+        console.info('User saved successfully', user);
+        this.userSavedOrClosed.next();
+        e.preventDefault();
+      }).catch(console.error);
   }
   onSearch(filterString: string): Observable<Role[]> {
-    return of([]);
-    // return this.roleService.findByName(filterString);
+    return from(this.roleService.fetchRoles(filterString));
   }
   onRoleSelected(role: Role) {
     this.user.roles = this.user.roles || [];
     if (!this.user.roles.some(x => x.name === role.name)) {
       this.user.roles.push(role);
-      // this.resouceService.getResourcesForRoles([role])
-      //   .then(resources => {
-      //     this.user.resources = this.user.resources || [];
-      //     resources.forEach(res => {
-      //       if (!this.user.resources.some(r => r.id === res.id)) {
-      //         this.user.resources.push(res);
-      //       }
-      //     });
-      //   }).catch(error => {
-      //     console.error(error);
-      //   })
+      this.nodes = [...this.nodes, this.getTreeNode(role)];
     }
   }
   deleteRole(role: Role) {
@@ -99,15 +88,13 @@ export class EditUserComponent implements OnInit {
     }
   }
   private resolveTree(user: User) {
-    debugger;
-    const nodes = user.roles.map(role => {
-      const node = {
-        data: role,
-        children: role.resources.map(res => ({ data: res }))
-      };
-      return node;
-    });
-    this.nodes = nodes;
+    this.nodes = user.roles.map(this.getTreeNode);
+  }
+  private getTreeNode(role) : TreeNode {
+    return {
+      data : role,
+      children : role.resources ?  role.resources.map(res => ({ data: res })) : []
+    };
   }
   resolveUserResource(user: User): Resource[] {
     const resx = {};

@@ -6,6 +6,7 @@ import { map } from 'rxjs/operators';
 import { Apollo } from 'apollo-angular';
 import gql from 'graphql-tag';
 import { Observable } from 'rxjs';
+import { ApolloClient } from 'apollo-client';
 
 const allUsersQuery = gql`
   query allUsers($filter: UserFilterInput) {
@@ -53,12 +54,22 @@ const singleUserQuery = gql`
     }
   }
 `;
+const updateUser = gql`
+  mutation UpdateUser($user: UserCreateUpdateInput!) {
+    updateUser(user: $user) {
+      userId
+    }
+  }
+`;
+
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
+  private clientProxy : ApolloClient<any>;
   constructor(private apollo: Apollo) {
+    this.clientProxy = apollo.getClient();
   }
   fetch(): Promise<User[]> {
     const client = this.apollo.getClient();
@@ -77,16 +88,23 @@ export class UserService {
       query: allUsersQuery
     }).then(result => result.data.users);
   }
-  // saveUser(user: User): Promise<User> {
-  //   // const url = `${this.baseUrl}/save`;
-  //   // return this.http.post<User>(url, user).toPromise();
-  // }
+  saveUser(user: User): Promise<User> {
+    return this.clientProxy.mutate({
+      mutation : updateUser,
+      variables : {
+        user
+      }
+    }).then(({data})=> {
+      return data.updateUser;
+    });
+  }
   fetchUser(userId: string): Promise<User> {
     return this.apollo.getClient().query<any, any>({
       query: singleUserQuery,
       variables: {
         userId
-      }
+      },
+      fetchPolicy: 'network-only'
     }).then(result => result.data.user);
   }
 
