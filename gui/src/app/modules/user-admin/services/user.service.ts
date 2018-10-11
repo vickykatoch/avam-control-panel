@@ -54,9 +54,9 @@ const singleUserQuery = gql`
     }
   }
 `;
-const updateUser = gql`
-  mutation UpdateUser($user: UserCreateUpdateInput!) {
-    updateUser(user: $user) {
+const saveUserMuation = gql`
+  mutation SaveUser($user: UserCreateUpdateInput!) {
+    saveUser(user: $user) {
       userId
     }
   }
@@ -79,7 +79,8 @@ export class UserService {
         filter: {
           isActive: true
         }
-      }
+      },
+      fetchPolicy: 'network-only'
     }).then(result => result.data.users);
   }
   fetchAll(pageInfo?: PageInfo): Promise<User[]> {
@@ -90,12 +91,12 @@ export class UserService {
   }
   saveUser(user: User): Promise<User> {
     return this.clientProxy.mutate({
-      mutation : updateUser,
+      mutation : saveUserMuation,
       variables : {
         user
       }
     }).then(({data})=> {
-      return data.updateUser;
+      return data.saveUser;
     });
   }
   fetchUser(userId: string): Promise<User> {

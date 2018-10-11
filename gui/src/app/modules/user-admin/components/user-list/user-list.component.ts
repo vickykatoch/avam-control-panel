@@ -20,7 +20,9 @@ export class UserListComponent implements OnInit {
   ngOnInit() {
     this.fetchUsers();
   }
-
+  ngOnDestroy() {
+    console.log('Destroyed');
+  }
   //#region Event Handlers
   onRefresh() {
     this.fetchUsers();
@@ -39,7 +41,7 @@ export class UserListComponent implements OnInit {
   // #region Helper Methods
   private fetchUsers() {
     this.isBz = true;
-    this.userService.fetchAll().then(users => {
+    this.userService.fetch().then(users => {
       this.users = users;
       this.isBz = false;
     });
